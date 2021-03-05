@@ -1,0 +1,10 @@
+spotless {
+    java {
+        importOrder()
+
+        removeUnusedImports()
+    }
+    kotlin {
+        ktlint()
+    }
+}

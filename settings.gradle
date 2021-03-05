@@ -1,0 +1,3 @@
+include ':spv-channels'
+include ':app'
+rootProject.name = "SPV channels"

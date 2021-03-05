@@ -1,29 +1,23 @@
-# README #
+# SPV Channels Android SDK
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This repository contains SPV Channels Android SDK. 
+It contains the Android client library for interacting with the server. 
 
-### What is this repository for? ###
+## Requirements
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+This SDK can only be used as part of Android projects, and as such also requires a recent JDK to
+build (should be provided by an installation of Android Studio).
 
-### How do I get set up? ###
+## Building
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Building from Android Studio
 
-### Contribution guidelines ###
+When using Android studio using the default build of app module will also build SDK, with no extra actions required.
 
-* Writing tests
-* Code review
-* Other guidelines
+### Building from terminal
 
-### Who do I talk to? ###
+1. Use terminal to navigate to root project directory
 
-* Repo owner or admin
-* Other community or team contact
+2. run `./gradlew :spv-channels:assemble` on *nix OS, or `gradle.bat :spv-channels:assemble` on Windows
+
+You can also optionally use `:spv-channels:assembleDebug` or `:spv-channels:assembleRelease` to build debug or release builds respectively. Both are built if type is skipped.

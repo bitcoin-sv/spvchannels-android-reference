@@ -3,6 +3,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.nchain.spvchannels.host.screens.channels.ChannelsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

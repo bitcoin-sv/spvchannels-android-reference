@@ -1,18 +1,27 @@
 package com.nchain.spvchannels.host.screens.startup
 
+import androidx.lifecycle.SavedStateHandle
 import com.nchain.spvchannels.host.navigation.NavigationAction
 import com.nchain.spvchannels.host.screens.binding.CommonViewModel
 
-class StartupViewModel : CommonViewModel() {
-    var url = "https://localhost:5010"
+class StartupViewModel(savedStateHandle: SavedStateHandle) : CommonViewModel(savedStateHandle) {
+    var url = ""
+    var username = ""
+    var password = ""
+    var token = ""
 
-    fun apply() {
+    fun openChannels() {
         navFlow.emitInScope(
             NavigationAction.NavigateTo(
-                StartupFragmentDirections.actionStartupFragmentToSdkRootFragment(
-                    url
+                StartupFragmentDirections.actionStartupFragmentToChannelsFragment(
+                    url,
+                    username,
+                    password
                 )
             )
         )
+    }
+
+    fun openMessages() {
     }
 }

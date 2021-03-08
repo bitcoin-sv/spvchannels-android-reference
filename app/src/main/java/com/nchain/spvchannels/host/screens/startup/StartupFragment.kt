@@ -10,9 +10,4 @@ import dagger.hilt.android.AndroidEntryPoint
 class StartupFragment : BindingFragment<FragmentStartupBinding, StartupViewModel>() {
     override val layout = R.layout.fragment_startup
     override val viewModel by viewModels<StartupViewModel>()
-
-    override fun setupViewModel() {
-        super.setupViewModel()
-        binding.viewModel = viewModel
-    }
 }

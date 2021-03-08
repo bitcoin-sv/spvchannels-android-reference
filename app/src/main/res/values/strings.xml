@@ -2,4 +2,12 @@
     <string name="app_name">SPV channels</string>
     <string name="msg_base_url">Base URL</string>
     <string name="action_enter">Enter</string>
+    <string name="action_change_url">Change url</string>
+    <string name="msg_username">Username</string>
+    <string name="msg_password">Password</string>
+    <string name="action_open_channels">Open channels API</string>
+    <string name="msg_channels_api">Channels API</string>
+    <string name="action_open_messages">Open messages API</string>
+    <string name="msg_messages">Messages API</string>
+    <string name="msg_token">Token</string>
 </resources>

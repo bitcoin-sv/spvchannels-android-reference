@@ -11,16 +11,22 @@
         android:label="StartupFragment"
         tools:layout="@layout/fragment_startup">
         <action
-            android:id="@+id/action_startupFragment_to_sdkRootFragment"
-            app:destination="@id/sdkRootFragment" />
+            android:id="@+id/action_startupFragment_to_channelsFragment"
+            app:destination="@id/channelsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/sdkRootFragment"
-        android:name="com.nchain.spvchannels.host.screens.sdkroot.SdkRootFragment"
-        android:label="SdkRootFragment"
-        tools:layout="@layout/fragment_sdkroot" >
+        android:id="@+id/channelsFragment"
+        android:name="com.nchain.spvchannels.host.screens.channels.ChannelsFragment"
+        android:label="ChannelsFragment"
+        tools:layout="@layout/fragment_channels" >
         <argument
             android:name="baseUrl"
+            app:argType="string" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <argument
+            android:name="password"
             app:argType="string" />
     </fragment>
 </navigation>

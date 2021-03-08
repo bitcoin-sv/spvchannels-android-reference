@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SPV channels</string>
+    <string name="msg_base_url">Base URL</string>
+    <string name="action_enter">Enter</string>
 </resources>

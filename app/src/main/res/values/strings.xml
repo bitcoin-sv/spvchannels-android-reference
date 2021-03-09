@@ -28,4 +28,7 @@
     <string name="msg_get_channel_tokens">Get channel tokens</string>
     <string name="msg_leave_empty">Leave empty for all (list only)</string>
     <string name="msg_get_token_info">Get token info</string>
+    <string name="msg_create_token">Create token</string>
+    <string name="msg_description">Description</string>
+    <string name="msg_revoke_token">Revoke token</string>
 </resources>

@@ -28,5 +28,8 @@
         <argument
             android:name="password"
             app:argType="string" />
+        <argument
+            android:name="accountId"
+            app:argType="string" />
     </fragment>
 </navigation>

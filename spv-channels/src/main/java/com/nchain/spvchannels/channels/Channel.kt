@@ -71,4 +71,13 @@ class Channel(
             service.getTokens(accountId, channelId, token)
         )
     }
+
+    suspend fun getTokenInfo(
+        channelId: String,
+        token: String
+    ): Status<TokenInfo> = withContext(context) {
+        Status.fromResponse(
+            service.getTokenInfo(accountId, channelId, token)
+        )
+    }
 }

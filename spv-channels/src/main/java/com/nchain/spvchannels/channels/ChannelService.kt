@@ -50,4 +50,11 @@ interface ChannelService {
         @Path("channelId") channelId: String,
         @Query("token") token: String? = null
     ): Response<List<TokenInfo>>
+
+    @GET("/api/v1/account/{accountId}/channel/{channelId}/api-token/{tokenId}")
+    suspend fun getTokenInfo(
+        @Path("accountId") accountId: String,
+        @Path("channelId") channelId: String,
+        @Path("tokenId") tokenId: String,
+    ): Response<TokenInfo>
 }

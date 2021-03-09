@@ -33,6 +33,11 @@ class ChannelsViewModel @Inject constructor(
     }
     val options = listOf(
         Option(
+            R.string.msg_list_channels,
+            listOf(),
+            this::listChannels
+        ),
+        Option(
             R.string.msg_create_channel,
             listOf(
                 R.id.cb_read,
@@ -56,6 +61,12 @@ class ChannelsViewModel @Inject constructor(
     private val stateFlow = MutableStateFlow(options[0])
     val visibility = stateFlow.asLiveData()
     val state = ViewState()
+
+    private fun listChannels() = launchCatching {
+        val response = channels.getAllChannels()
+
+        setResponseText(response)
+    }
 
     private fun createChannel() = launchCatching {
         val response = channels.createChannel(

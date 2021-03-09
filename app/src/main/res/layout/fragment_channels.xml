@@ -18,13 +18,13 @@
             android:layout_margin="24dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/msg_create_channel" />
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <CheckBox
+                android:visibility="gone"
                 android:id="@+id/cb_read"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,18 +74,29 @@
                 android:text="@={viewModel.state.maxAge}" />
 
             <CheckBox
-
                 android:id="@+id/cb_auto_prune"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="@={viewModel.state.autoPrune}"
                 android:text="@string/msg_auto_prune" />
 
+            <TextView
+                android:id="@+id/tv_channel_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/et_min_age"
+                android:text="@string/msg_channel_id" />
+
+            <EditText
+                android:id="@+id/et_channel_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={viewModel.state.channelId}" />
+
             <Button
                 android:id="@+id/btn_perform"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{_ -> viewModel.createChannel()}"
                 android:text="@string/msg_create_channel" />
 
             <TextView
@@ -97,7 +108,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:text="@{viewModel.state.response}" />
+                android:text="@{viewModel.state.response}"
+                android:textIsSelectable="true" />
         </LinearLayout>
     </ScrollView>
 </layout>

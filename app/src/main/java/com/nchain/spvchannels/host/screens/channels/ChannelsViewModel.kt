@@ -51,6 +51,17 @@ class ChannelsViewModel @Inject constructor(
             this::createChannel
         ),
         Option(
+            R.string.msg_amend_channel,
+            listOf(
+                R.id.cb_read,
+                R.id.cb_write,
+                R.id.cb_locked,
+                R.id.tv_channel_id,
+                R.id.et_channel_id,
+            ),
+            this::amendChannel
+        ),
+        Option(
             R.string.msg_get_channel,
             listOf(
                 R.id.et_channel_id,
@@ -85,6 +96,12 @@ class ChannelsViewModel @Inject constructor(
                 state.autoPrune,
             )
         )
+
+        setResponseText(response)
+    }
+
+    private fun amendChannel() = launchCatching {
+        val response = channels.amendChannel(state.channelId, state.read, state.write, state.locked)
 
         setResponseText(response)
     }

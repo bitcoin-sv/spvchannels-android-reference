@@ -1,6 +1,7 @@
 package com.nchain.spvchannels.channels
 
 import com.nchain.spvchannels.channels.models.ChannelInfo
+import com.nchain.spvchannels.channels.models.ChannelPermissions
 import com.nchain.spvchannels.channels.models.api.ChannelsResponse
 import com.nchain.spvchannels.channels.models.api.CreateRequest
 import retrofit2.Response
@@ -21,6 +22,13 @@ interface ChannelService {
         @Path("accountId") accountId: String,
         @Body request: CreateRequest,
     ): Response<ChannelInfo>
+
+    @POST("/api/v1/account/{accountId}/channel/{channelId}")
+    suspend fun amendChannel(
+        @Path("accountId") accountId: String,
+        @Path("channelId") channelId: String,
+        @Body channelPermissions: ChannelPermissions,
+    ): Response<ChannelPermissions>
 
     @GET("/api/v1/account/{accountId}/channel/{channelId}")
     suspend fun getChannel(

@@ -24,12 +24,12 @@
                 android:layout_height="wrap_content" />
 
             <CheckBox
-                android:visibility="gone"
                 android:id="@+id/cb_read"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="@={viewModel.state.read}"
-                android:text="@string/msg_public_read" />
+                android:text="@string/msg_public_read"
+                android:visibility="gone" />
 
             <CheckBox
                 android:id="@+id/cb_write"
@@ -79,6 +79,13 @@
                 android:layout_height="wrap_content"
                 android:checked="@={viewModel.state.autoPrune}"
                 android:text="@string/msg_auto_prune" />
+
+            <CheckBox
+                android:id="@+id/cb_locked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.state.locked}"
+                android:text="@string/msg_locked" />
 
             <TextView
                 android:id="@+id/tv_channel_id"

@@ -1,6 +1,7 @@
 package com.nchain.spvchannels.channels
 
 import com.nchain.spvchannels.channels.models.ChannelInfo
+import com.nchain.spvchannels.channels.models.ChannelPermissions
 import com.nchain.spvchannels.channels.models.Retention
 import com.nchain.spvchannels.channels.models.api.CreateRequest
 import com.nchain.spvchannels.response.Status
@@ -30,6 +31,21 @@ class Channel(
             service.createChannel(
                 accountId,
                 CreateRequest(publicRead, publicWrite, sequenced, retention)
+            )
+        )
+    }
+
+    suspend fun amendChannel(
+        channelId: String,
+        publicRead: Boolean,
+        publicWrite: Boolean,
+        locked: Boolean,
+    ): Status<ChannelPermissions> = withContext(context) {
+        Status.fromResponse(
+            service.amendChannel(
+                accountId,
+                channelId,
+                ChannelPermissions(publicRead, publicWrite, locked)
             )
         )
     }

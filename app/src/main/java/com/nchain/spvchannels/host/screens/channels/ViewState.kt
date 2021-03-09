@@ -9,6 +9,7 @@ class ViewState : BaseObservable() {
     var minAge = "0"
     var maxAge = "0"
     var autoPrune = false
+    var channelId = ""
     var response = ""
         set(value) {
             field = value

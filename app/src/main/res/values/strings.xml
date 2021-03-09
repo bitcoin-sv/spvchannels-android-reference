@@ -19,4 +19,6 @@
     <string name="msg_max_age">Max age</string>
     <string name="msg_auto_prune">Auto prune</string>
     <string name="msg_response">Response:</string>
+    <string name="msg_get_channel">Get channel</string>
+    <string name="msg_channel_id">Channel ID</string>
 </resources>

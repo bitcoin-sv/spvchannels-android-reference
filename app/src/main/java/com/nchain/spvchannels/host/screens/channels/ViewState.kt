@@ -12,6 +12,7 @@ class ViewState : BaseObservable() {
     var autoPrune = false
     var channelId = ""
     var token = ""
+    var description = ""
     var response = ""
         set(value) {
             field = value

@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/layout_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="24dp"
@@ -113,6 +114,19 @@
                 android:hint="@string/msg_leave_empty"
                 android:text="@={viewModel.state.token}" />
 
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/et_description"
+                android:text="@string/msg_description" />
+
+            <EditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={viewModel.state.description}" />
+
             <Button
                 android:id="@+id/btn_perform"
                 android:layout_width="match_parent"
@@ -120,11 +134,13 @@
                 android:text="@string/msg_create_channel" />
 
             <TextView
+                android:id="@+id/tv_response"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/msg_response" />
 
             <TextView
+                android:id="@+id/tv_response_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"

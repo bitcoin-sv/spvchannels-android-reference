@@ -86,6 +86,16 @@ class ChannelsViewModel @Inject constructor(
             ),
             this::getChannelTokens
         ),
+        Option(
+            R.string.msg_get_token_info,
+            listOf(
+                R.id.tv_channel_id,
+                R.id.et_channel_id,
+                R.id.tv_token,
+                R.id.et_token,
+            ),
+            this::getTokenInfo
+        ),
     )
     private val stateFlow = MutableStateFlow(options[0])
     val visibility = stateFlow.asLiveData()
@@ -131,6 +141,12 @@ class ChannelsViewModel @Inject constructor(
     private fun getChannelTokens() = launchCatching {
         val token = if (state.token.isEmpty()) null else state.token
         val response = channels.getChannelTokens(state.channelId, token)
+
+        setResponseText(response)
+    }
+
+    private fun getTokenInfo() = launchCatching {
+        val response = channels.getTokenInfo(state.channelId, state.token)
 
         setResponseText(response)
     }

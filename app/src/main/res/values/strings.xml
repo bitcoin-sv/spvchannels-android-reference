@@ -26,5 +26,6 @@
     <string name="msg_amend_channel">Amend channel</string>
     <string name="msg_locked">Locked</string>
     <string name="msg_get_channel_tokens">Get channel tokens</string>
-    <string name="msg_leave_empty">Leave empty for all</string>
+    <string name="msg_leave_empty">Leave empty for all (list only)</string>
+    <string name="msg_get_token_info">Get token info</string>
 </resources>

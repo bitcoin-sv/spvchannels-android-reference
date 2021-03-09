@@ -65,4 +65,11 @@ interface ChannelService {
         @Path("channelId") channelId: String,
         @Body request: CreateTokenRequest
     ): Response<TokenInfo>
+
+    @DELETE("/api/v1/account/{accountId}/channel/{channelId}/api-token/{tokenId}")
+    suspend fun revokeToken(
+        @Path("accountId") accountId: String,
+        @Path("channelId") channelId: String,
+        @Path("tokenId") tokenId: String,
+    ): Response<Unit>
 }

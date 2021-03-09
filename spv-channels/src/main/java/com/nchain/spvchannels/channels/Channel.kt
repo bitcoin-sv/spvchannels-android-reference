@@ -75,7 +75,7 @@ class Channel(
 
     suspend fun getTokenInfo(
         channelId: String,
-        token: String
+        token: String,
     ): Status<TokenInfo> = withContext(context) {
         Status.fromResponse(
             service.getTokenInfo(accountId, channelId, token)
@@ -93,6 +93,19 @@ class Channel(
                 accountId,
                 channelId,
                 CreateTokenRequest(description, canRead, canWrite)
+            )
+        )
+    }
+
+    suspend fun revokeToken(
+        channelId: String,
+        token: String,
+    ): Status<Unit> = withContext(context) {
+        Status.fromResponse(
+            service.revokeToken(
+                accountId,
+                channelId,
+                token
             )
         )
     }

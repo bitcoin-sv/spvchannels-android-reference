@@ -28,8 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="@={viewModel.state.read}"
-                android:text="@string/msg_public_read"
-                android:visibility="gone" />
+                android:text="@string/msg_public_read" />
 
             <CheckBox
                 android:id="@+id/cb_write"
@@ -91,7 +90,7 @@
                 android:id="@+id/tv_channel_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:labelFor="@id/et_min_age"
+                android:labelFor="@id/et_channel_id"
                 android:text="@string/msg_channel_id" />
 
             <EditText
@@ -99,6 +98,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={viewModel.state.channelId}" />
+
+            <TextView
+                android:id="@+id/tv_token"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/et_token"
+                android:text="@string/msg_token" />
+
+            <EditText
+                android:id="@+id/et_token"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/msg_leave_empty"
+                android:text="@={viewModel.state.token}" />
 
             <Button
                 android:id="@+id/btn_perform"

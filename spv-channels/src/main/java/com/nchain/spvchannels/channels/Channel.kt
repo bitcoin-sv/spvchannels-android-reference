@@ -3,6 +3,7 @@ package com.nchain.spvchannels.channels
 import com.nchain.spvchannels.channels.models.ChannelInfo
 import com.nchain.spvchannels.channels.models.ChannelPermissions
 import com.nchain.spvchannels.channels.models.Retention
+import com.nchain.spvchannels.channels.models.TokenInfo
 import com.nchain.spvchannels.channels.models.api.CreateRequest
 import com.nchain.spvchannels.response.Status
 import kotlin.coroutines.CoroutineContext
@@ -59,6 +60,24 @@ class Channel(
     suspend fun deleteChannel(channelId: String): Status<Unit> = withContext(context) {
         Status.fromResponse(
             service.deleteChannel(accountId, channelId)
+        )
+    }
+
+    suspend fun getChannelTokens(
+        channelId: String,
+        token: String? = null
+    ): Status<List<TokenInfo>> = withContext(context) {
+        Status.fromResponse(
+            service.getTokens(accountId, channelId, token)
+        )
+    }
+
+    suspend fun getTokenInfo(
+        channelId: String,
+        token: String
+    ): Status<TokenInfo> = withContext(context) {
+        Status.fromResponse(
+            service.getTokenInfo(accountId, channelId, token)
         )
     }
 }

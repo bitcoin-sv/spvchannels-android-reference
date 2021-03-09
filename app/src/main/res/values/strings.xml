@@ -10,4 +10,13 @@
     <string name="action_open_messages">Open messages API</string>
     <string name="msg_messages">Messages API</string>
     <string name="msg_token">Token</string>
+    <string name="msg_account_id">Account ID</string>
+    <string name="msg_create_channel">Create channel</string>
+    <string name="msg_public_read">Public read</string>
+    <string name="msg_public_write">Public write</string>
+    <string name="msg_sequenced">Sequenced</string>
+    <string name="msg_min_age">Min age</string>
+    <string name="msg_max_age">Max age</string>
+    <string name="msg_auto_prune">Auto prune</string>
+    <string name="msg_response">Response:</string>
 </resources>

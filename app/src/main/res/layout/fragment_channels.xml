@@ -8,9 +8,96 @@
             type="com.nchain.spvchannels.host.screens.channels.ChannelsViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_create_channel" />
+
+            <CheckBox
+                android:id="@+id/cb_read"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.state.read}"
+                android:text="@string/msg_public_read" />
+
+            <CheckBox
+                android:id="@+id/cb_write"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.state.write}"
+                android:text="@string/msg_public_write" />
+
+            <CheckBox
+                android:id="@+id/cb_sequenced"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.state.sequenced}"
+                android:text="@string/msg_sequenced" />
+
+            <TextView
+                android:id="@+id/tv_min_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/et_min_age"
+                android:text="@string/msg_min_age" />
+
+            <EditText
+                android:id="@+id/et_min_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@={viewModel.state.minAge}" />
+
+            <TextView
+                android:id="@+id/tv_max_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/et_min_age"
+                android:text="@string/msg_max_age" />
+
+            <EditText
+                android:id="@+id/et_max_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@={viewModel.state.maxAge}" />
+
+            <CheckBox
+
+                android:id="@+id/cb_auto_prune"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.state.autoPrune}"
+                android:text="@string/msg_auto_prune" />
+
+            <Button
+                android:id="@+id/btn_perform"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{_ -> viewModel.createChannel()}"
+                android:text="@string/msg_create_channel" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_response" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="@{viewModel.state.response}" />
+        </LinearLayout>
+    </ScrollView>
 </layout>

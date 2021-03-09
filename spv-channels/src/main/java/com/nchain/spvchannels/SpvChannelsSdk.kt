@@ -2,6 +2,8 @@ package com.nchain.spvchannels
 
 import com.nchain.spvchannels.channels.BasicAuthInterceptor
 import com.nchain.spvchannels.channels.Channel
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.Dispatchers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,14 +20,23 @@ class SpvChannelsSdk(private val baseUrl: String) {
     /**
      * Creates and returns a new [Channel] object with given credentials.
      *
+     * @param accountId the ID of the account for which the channels should be managed
      * @param username the username to use with channel authentication
      * @param password the password to use with channel authentication
+     * @param coroutineContext the coroutine context to use for requests, Dispatcher.IO is default
+     * and should provide desired functionality, should be replaced with your test dispatcher in
+     * tests.
      */
-    fun channelWithCredentials(username: String, password: String): Channel {
+    fun channelWithCredentials(
+        accountId: String,
+        username: String,
+        password: String,
+        coroutineContext: CoroutineContext = Dispatchers.IO
+    ): Channel {
         val client = createClient(BasicAuthInterceptor(username, password))
         val retrofit = createRetrofit(client)
 
-        return Channel(retrofit.create())
+        return Channel(retrofit.create(), accountId, coroutineContext)
     }
 
     /**

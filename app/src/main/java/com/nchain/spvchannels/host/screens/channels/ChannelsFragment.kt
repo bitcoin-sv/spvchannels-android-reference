@@ -25,7 +25,10 @@ class ChannelsFragment : BindingFragment<FragmentChannelsBinding, ChannelsViewMo
         R.id.et_max_age,
         R.id.cb_auto_prune,
         R.id.tv_channel_id,
-        R.id.et_channel_id
+        R.id.et_channel_id,
+        R.id.cb_locked,
+        R.id.tv_token,
+        R.id.et_token
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

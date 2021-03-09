@@ -1,17 +1,13 @@
-package com.nchain.spvchannels.channels.models
+package com.nchain.spvchannels.channels.models.api
 
+import com.nchain.spvchannels.channels.models.Retention
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ChannelResponse(
-    @Json(name = "id") val id: String?,
-    @Json(name = "href") val href: String?,
+data class CreateRequest(
     @Json(name = "public_read") val publicRead: Boolean,
     @Json(name = "public_write") val publicWrite: Boolean,
     @Json(name = "sequenced") val sequenced: Boolean,
-    @Json(name = "locked") val locked: Boolean,
-    @Json(name = "head") val head: Long,
     @Json(name = "retention") val retention: Retention,
-    @Json(name = "access_tokens") val accessTokens: List<AccessToken>?,
 )

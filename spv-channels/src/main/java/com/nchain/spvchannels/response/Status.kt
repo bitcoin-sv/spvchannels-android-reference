@@ -12,9 +12,13 @@ sealed class Status<out T> {
 
     companion object {
         fun <T> fromResponse(response: Response<T>): Status<T> {
+            return fromResponse(response) { it }
+        }
+
+        fun <T, R> fromResponse(response: Response<T>, mapper: (T) -> R): Status<R> {
             if (response.isSuccessful) {
                 val body = response.body() ?: return NotFound
-                return Success(body)
+                return Success(mapper(body))
             }
 
             return when (response.code()) {

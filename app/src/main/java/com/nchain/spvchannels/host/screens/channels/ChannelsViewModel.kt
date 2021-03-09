@@ -107,7 +107,17 @@ class ChannelsViewModel @Inject constructor(
                 R.id.cb_write,
             ),
             this::createToken
-        )
+        ),
+        Option(
+            R.string.msg_revoke_token,
+            listOf(
+                R.id.tv_channel_id,
+                R.id.et_channel_id,
+                R.id.tv_token,
+                R.id.et_token,
+            ),
+            this::revokeToken
+        ),
     )
     private val stateFlow = MutableStateFlow(options[0])
     val visibility = stateFlow.asLiveData()
@@ -170,6 +180,12 @@ class ChannelsViewModel @Inject constructor(
             state.read,
             state.write
         )
+
+        setResponseText(response)
+    }
+
+    private fun revokeToken() = launchCatching {
+        val response = channels.revokeToken(state.channelId, state.token)
 
         setResponseText(response)
     }

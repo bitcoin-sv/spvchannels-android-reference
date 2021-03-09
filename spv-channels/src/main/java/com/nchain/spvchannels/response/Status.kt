@@ -5,6 +5,7 @@ import retrofit2.Response
 
 sealed class Status<out T> {
     data class Success<T>(val value: T) : Status<T>()
+    object NoContent : Status<Nothing>()
     object Unauthorized : Status<Nothing>()
     object Forbidden : Status<Nothing>()
     object NotFound : Status<Nothing>()
@@ -15,9 +16,12 @@ sealed class Status<out T> {
             return fromResponse(response) { it }
         }
 
-        fun <T, R> fromResponse(response: Response<T>, mapper: (T) -> R): Status<R> {
+        fun <T, R> fromResponse(
+            response: Response<T>,
+            mapper: (T) -> R
+        ): Status<R> {
             if (response.isSuccessful) {
-                val body = response.body() ?: return NotFound
+                val body = response.body() ?: return NoContent
                 return Success(mapper(body))
             }
 

@@ -1,6 +1,6 @@
 package com.nchain.spvchannels.channels
 
-import com.nchain.spvchannels.channels.models.Channel
+import com.nchain.spvchannels.channels.models.ChannelInfo
 import com.nchain.spvchannels.channels.models.Retention
 import com.nchain.spvchannels.channels.models.api.CreateRequest
 import com.nchain.spvchannels.response.Status
@@ -12,7 +12,7 @@ class Channel(
     private val accountId: String,
     private val context: CoroutineContext
 ) {
-    suspend fun getAllChannels(): Status<List<Channel>> = withContext(context) {
+    suspend fun getAllChannels(): Status<List<ChannelInfo>> = withContext(context) {
         Status.fromResponse(
             service.getAllChannels(accountId)
         ) {
@@ -25,7 +25,7 @@ class Channel(
         publicWrite: Boolean,
         sequenced: Boolean,
         retention: Retention,
-    ): Status<Channel> = withContext(context) {
+    ): Status<ChannelInfo> = withContext(context) {
         Status.fromResponse(
             service.createChannel(
                 accountId,
@@ -34,9 +34,15 @@ class Channel(
         )
     }
 
-    suspend fun getChannel(channelId: String): Status<Channel> = withContext(context) {
+    suspend fun getChannel(channelId: String): Status<ChannelInfo> = withContext(context) {
         Status.fromResponse(
             service.getChannel(accountId, channelId)
+        )
+    }
+
+    suspend fun deleteChannel(channelId: String): Status<Unit> = withContext(context) {
+        Status.fromResponse(
+            service.deleteChannel(accountId, channelId)
         )
     }
 }

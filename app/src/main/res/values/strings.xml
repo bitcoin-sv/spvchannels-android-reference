@@ -22,4 +22,5 @@
     <string name="msg_get_channel">Get channel</string>
     <string name="msg_channel_id">Channel ID</string>
     <string name="msg_list_channels">Get all channels</string>
+    <string name="msg_delete_channel">Delete channel</string>
 </resources>

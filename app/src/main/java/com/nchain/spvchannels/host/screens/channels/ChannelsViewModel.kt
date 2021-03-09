@@ -46,17 +46,25 @@ class ChannelsViewModel @Inject constructor(
                 R.id.tv_min_age,
                 R.id.et_min_age,
                 R.id.et_max_age,
-                R.id.cb_auto_prune
+                R.id.cb_auto_prune,
             ),
             this::createChannel
         ),
         Option(
             R.string.msg_get_channel,
             listOf(
-                R.id.et_channel_id
+                R.id.et_channel_id,
             ),
             this::getChannel
-        )
+        ),
+        Option(
+            R.string.msg_delete_channel,
+            listOf(
+                R.id.tv_channel_id,
+                R.id.et_channel_id,
+            ),
+            this::deleteChannel
+        ),
     )
     private val stateFlow = MutableStateFlow(options[0])
     val visibility = stateFlow.asLiveData()
@@ -87,6 +95,12 @@ class ChannelsViewModel @Inject constructor(
         setResponseText(response)
     }
 
+    private fun deleteChannel() = launchCatching {
+        val response = channels.deleteChannel(state.channelId)
+
+        setResponseText(response)
+    }
+
     private inline fun <reified T> setResponseText(response: Status<T>) {
         state.response = when (response) {
             is Status.Success -> objectSerializer.serialize(response.value) ?: ""
@@ -94,6 +108,7 @@ class ChannelsViewModel @Inject constructor(
             Status.NotFound -> "Not found"
             Status.ServerError -> "Server error"
             Status.Unauthorized -> "Unauthorized"
+            Status.NoContent -> "No content"
             else -> response.toString()
         }
     }

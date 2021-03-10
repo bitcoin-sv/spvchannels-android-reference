@@ -35,4 +35,5 @@
     <string name="msg_send_message">Send message</string>
     <string name="msg_content_type">Content type</string>
     <string name="msg_payload">Payload</string>
+    <string name="msg_get_max_sequence">Get max sequence</string>
 </resources>

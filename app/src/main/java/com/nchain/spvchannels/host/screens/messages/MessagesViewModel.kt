@@ -36,6 +36,13 @@ class MessagesViewModel @Inject constructor(
             ),
             this::sendMessage
         ),
+        Option(
+            R.string.msg_get_all_messages,
+            listOf(
+                R.id.cb_unread,
+            ),
+            this::getAllMessages
+        ),
     )
     override val state = ViewState()
 
@@ -52,5 +59,11 @@ class MessagesViewModel @Inject constructor(
         )
 
         setResponseText(state)
+    }
+
+    private fun getAllMessages() = launchCatching {
+        val result = messages.getAllMessages(state.unreadOnly)
+
+        setResponseText(result)
     }
 }

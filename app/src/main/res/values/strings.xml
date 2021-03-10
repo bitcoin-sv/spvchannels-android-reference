@@ -32,4 +32,7 @@
     <string name="msg_description">Description</string>
     <string name="msg_revoke_token">Revoke token</string>
     <string name="msg_select_action">Select action</string>
+    <string name="msg_send_message">Send message</string>
+    <string name="msg_content_type">Content type</string>
+    <string name="msg_payload">Payload</string>
 </resources>

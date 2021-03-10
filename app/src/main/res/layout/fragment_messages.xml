@@ -24,6 +24,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/et_type"
+                android:text="@string/msg_content_type" />
+
+            <EditText
+                android:id="@+id/et_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="@={viewModel.state.contentType}" />
+
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/et_message"
+                android:text="@string/msg_payload" />
+
+            <EditText
+                android:id="@+id/et_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="@={viewModel.state.message}" />
+
             <Button
                 android:id="@+id/btn_perform"
                 android:layout_width="match_parent"

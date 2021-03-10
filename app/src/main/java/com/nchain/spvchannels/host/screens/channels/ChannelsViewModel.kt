@@ -1,28 +1,20 @@
 package com.nchain.spvchannels.host.screens.channels
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.nchain.spvchannels.SpvChannelsSdk
 import com.nchain.spvchannels.channels.models.Retention
 import com.nchain.spvchannels.host.R
 import com.nchain.spvchannels.host.logging.ObjectSerializer
 import com.nchain.spvchannels.host.options.Option
-import com.nchain.spvchannels.host.screens.binding.CommonViewModel
-import com.nchain.spvchannels.response.Status
+import com.nchain.spvchannels.host.screens.multipurpose.MultiPurposeScreenViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @HiltViewModel
 class ChannelsViewModel @Inject constructor(
-    private val objectSerializer: ObjectSerializer,
-    savedStateHandle: SavedStateHandle
-) :
-    CommonViewModel(savedStateHandle) {
+    objectSerializer: ObjectSerializer,
+    savedStateHandle: SavedStateHandle,
+) : MultiPurposeScreenViewModel<ViewState>(objectSerializer, savedStateHandle) {
     private val args by navArgs<ChannelsFragmentArgs>()
     private val channels by lazy {
         SpvChannelsSdk(args.baseUrl).channelWithCredentials(
@@ -31,7 +23,7 @@ class ChannelsViewModel @Inject constructor(
             args.password
         )
     }
-    val options = listOf(
+    override val options = listOf(
         Option(
             R.string.msg_list_channels,
             listOf(),
@@ -119,9 +111,7 @@ class ChannelsViewModel @Inject constructor(
             this::revokeToken
         ),
     )
-    private val stateFlow = MutableStateFlow(options[0])
-    val visibility = stateFlow.asLiveData()
-    val state = ViewState()
+    override val state = ViewState()
 
     private fun listChannels() = launchCatching {
         val response = channels.getAllChannels()
@@ -188,31 +178,5 @@ class ChannelsViewModel @Inject constructor(
         val response = channels.revokeToken(state.channelId, state.token)
 
         setResponseText(response)
-    }
-
-    private inline fun <reified T> setResponseText(response: Status<T>) {
-        state.response = when (response) {
-            is Status.Success -> objectSerializer.serialize(response.value) ?: ""
-            Status.Forbidden -> "Forbidden"
-            Status.NotFound -> "Not found"
-            Status.ServerError -> "Server error"
-            Status.Unauthorized -> "Unauthorized"
-            Status.NoContent -> "No content"
-            else -> response.toString()
-        }
-    }
-
-    private fun launchCatching(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch {
-        try {
-            state.response = ""
-            block()
-        } catch (e: Exception) {
-            Timber.e(e)
-            state.response = e.toString()
-        }
-    }
-
-    fun selectItem(position: Int) {
-        stateFlow.emitInScope(options[position])
     }
 }

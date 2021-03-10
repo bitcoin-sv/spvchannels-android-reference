@@ -1,8 +1,8 @@
 package com.nchain.spvchannels.host.screens.channels
 
-import androidx.databinding.BaseObservable
+import com.nchain.spvchannels.host.screens.multipurpose.CommonViewState
 
-class ViewState : BaseObservable() {
+class ViewState : CommonViewState() {
     var read = false
     var write = false
     var sequenced = false
@@ -13,9 +13,4 @@ class ViewState : BaseObservable() {
     var channelId = ""
     var token = ""
     var description = ""
-    var response = ""
-        set(value) {
-            field = value
-            notifyChange()
-        }
 }

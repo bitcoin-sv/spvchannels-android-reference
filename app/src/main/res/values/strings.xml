@@ -31,4 +31,5 @@
     <string name="msg_create_token">Create token</string>
     <string name="msg_description">Description</string>
     <string name="msg_revoke_token">Revoke token</string>
+    <string name="msg_select_action">Select action</string>
 </resources>

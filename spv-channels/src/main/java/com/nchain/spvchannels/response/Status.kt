@@ -12,11 +12,11 @@ sealed class Status<out T> {
     object ServerError : Status<Nothing>()
 
     companion object {
-        fun <T> fromResponse(response: Response<T>): Status<T> {
+        internal fun <T> fromResponse(response: Response<T>): Status<T> {
             return fromResponse(response) { it }
         }
 
-        fun <T, R> fromResponse(
+        internal fun <T, R> fromResponse(
             response: Response<T>,
             mapper: (T) -> R
         ): Status<R> {

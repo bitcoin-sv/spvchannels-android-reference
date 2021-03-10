@@ -10,10 +10,10 @@ import com.nchain.spvchannels.response.Status
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.withContext
 
-class Channel(
+class Channel internal constructor(
     private val service: ChannelService,
     private val accountId: String,
-    private val context: CoroutineContext
+    private val context: CoroutineContext,
 ) {
     suspend fun getAllChannels(): Status<List<ChannelInfo>> = withContext(context) {
         Status.fromResponse(

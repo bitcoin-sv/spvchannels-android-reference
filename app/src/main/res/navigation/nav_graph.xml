@@ -13,12 +13,15 @@
         <action
             android:id="@+id/action_startupFragment_to_channelsFragment"
             app:destination="@id/channelsFragment" />
+        <action
+            android:id="@+id/action_startupFragment_to_messagesFragment"
+            app:destination="@id/messagesFragment" />
     </fragment>
     <fragment
         android:id="@+id/channelsFragment"
         android:name="com.nchain.spvchannels.host.screens.channels.ChannelsFragment"
         android:label="ChannelsFragment"
-        tools:layout="@layout/fragment_channels" >
+        tools:layout="@layout/fragment_channels">
         <argument
             android:name="baseUrl"
             app:argType="string" />
@@ -30,6 +33,21 @@
             app:argType="string" />
         <argument
             android:name="accountId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.nchain.spvchannels.host.screens.messages.MessagesFragment"
+        android:label="MessagesFragment"
+        tools:layout="@layout/fragment_messages">
+        <argument
+            android:name="baseUrl"
+            app:argType="string" />
+        <argument
+            android:name="channelId"
+            app:argType="string" />
+        <argument
+            android:name="token"
             app:argType="string" />
     </fragment>
 </navigation>

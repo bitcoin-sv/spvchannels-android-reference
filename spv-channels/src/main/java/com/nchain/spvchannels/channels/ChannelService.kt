@@ -14,7 +14,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ChannelService {
+internal interface ChannelService {
     @GET("/api/v1/account/{accountId}/channel/list")
     suspend fun getAllChannels(
         @Path("accountId") accountId: String,

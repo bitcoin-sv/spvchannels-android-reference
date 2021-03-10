@@ -32,7 +32,16 @@ class StartupViewModel @Inject constructor(
         set(value) {
             storage.password = value
         }
-    var token = ""
+    var channelId: String
+        get() = storage.channelId
+        set(value) {
+            storage.channelId = value
+        }
+    var token: String
+        get() = storage.token
+        set(value) {
+            storage.token = value
+        }
 
     fun openChannels() {
         navFlow.emitInScope(
@@ -48,5 +57,14 @@ class StartupViewModel @Inject constructor(
     }
 
     fun openMessages() {
+        navFlow.emitInScope(
+            NavigationAction.NavigateTo(
+                StartupFragmentDirections.actionStartupFragmentToMessagesFragment(
+                    url,
+                    channelId,
+                    token,
+                )
+            )
+        )
     }
 }

@@ -38,7 +38,7 @@ internal interface MessageService {
         @Path("sequenceId") sequenceId: String,
         @Query("older") older: Boolean? = false,
         @Body request: ReadRequest,
-    ): Response<List<Message>>
+    ): Response<Unit>
 
     @DELETE("/api/v1/channel/{channelId}/{sequenceId}")
     suspend fun deleteMessage(

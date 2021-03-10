@@ -52,6 +52,13 @@
                 android:inputType="text"
                 android:text="@={viewModel.state.message}" />
 
+            <CheckBox
+                android:id="@+id/cb_unread"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.state.unreadOnly}"
+                android:text="@string/msg_unread_only" />
+
             <Button
                 android:id="@+id/btn_perform"
                 android:layout_width="match_parent"

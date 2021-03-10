@@ -29,4 +29,12 @@ class Messaging internal constructor(
             )
         )
     }
+
+    suspend fun getAllMessages(
+        unreadOnly: Boolean? = null
+    ): Status<List<Message>> = withContext(context) {
+        Status.fromResponse(
+            messageService.getMessages(channelId, unreadOnly)
+        )
+    }
 }

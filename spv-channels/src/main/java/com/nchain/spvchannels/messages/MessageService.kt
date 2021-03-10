@@ -27,6 +27,6 @@ internal interface MessageService {
     @GET("/api/v1/channel/{channelId}")
     suspend fun getMessages(
         @Path("channelId") channelId: String,
-        @Query("unread") unread: Boolean?
+        @Query("unread") unread: Boolean?,
     ): Response<List<Message>>
 }

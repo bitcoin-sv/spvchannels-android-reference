@@ -43,6 +43,24 @@ class MessagesViewModel @Inject constructor(
             ),
             this::getAllMessages
         ),
+        Option(
+            R.string.msg_mark_read,
+            listOf(
+                R.id.tv_message_id,
+                R.id.et_message_id,
+                R.id.cb_read,
+                R.id.cb_older,
+            ),
+            this::markMessageRead
+        ),
+        Option(
+            R.string.msg_delete_message,
+            listOf(
+                R.id.tv_message_id,
+                R.id.et_message_id,
+            ),
+            this::deleteMessage
+        ),
     )
     override val state = ViewState()
 
@@ -63,6 +81,18 @@ class MessagesViewModel @Inject constructor(
 
     private fun getAllMessages() = launchCatching {
         val result = messages.getAllMessages(state.unreadOnly)
+
+        setResponseText(result)
+    }
+
+    private fun markMessageRead() = launchCatching {
+        val result = messages.markMessageRead(state.messageId, state.messageRead, state.older)
+
+        setResponseText(result)
+    }
+
+    private fun deleteMessage() = launchCatching {
+        val result = messages.deleteMessage(state.messageId)
 
         setResponseText(result)
     }

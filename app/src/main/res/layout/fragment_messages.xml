@@ -52,12 +52,40 @@
                 android:inputType="text"
                 android:text="@={viewModel.state.message}" />
 
+            <TextView
+                android:id="@+id/tv_message_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/et_message_id"
+                android:text="@string/msg_message_id" />
+
+            <EditText
+                android:id="@+id/et_message_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="@={viewModel.state.messageId}" />
+
             <CheckBox
                 android:id="@+id/cb_unread"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="@={viewModel.state.unreadOnly}"
                 android:text="@string/msg_unread_only" />
+
+            <CheckBox
+                android:id="@+id/cb_read"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.state.messageRead}"
+                android:text="@string/msg_message_read_unread" />
+
+            <CheckBox
+                android:id="@+id/cb_older"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.state.older}"
+                android:text="@string/msg_mark_earlier" />
 
             <Button
                 android:id="@+id/btn_perform"

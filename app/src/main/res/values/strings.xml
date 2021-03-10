@@ -38,4 +38,9 @@
     <string name="msg_get_max_sequence">Get max sequence</string>
     <string name="msg_get_all_messages">Get all messages</string>
     <string name="msg_unread_only">Unread only</string>
+    <string name="msg_message_read_unread">Set message read/unread</string>
+    <string name="msg_mark_earlier">Also mark earlier messages</string>
+    <string name="msg_mark_read">Mark message as read/unread</string>
+    <string name="msg_delete_message">Delete message</string>
+    <string name="msg_message_id">Message ID</string>
 </resources>

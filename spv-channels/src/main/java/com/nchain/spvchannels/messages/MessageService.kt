@@ -1,9 +1,11 @@
 package com.nchain.spvchannels.messages
 
 import com.nchain.spvchannels.messages.models.Message
+import com.nchain.spvchannels.messages.models.ReadRequest
 import okhttp3.MediaType
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HEAD
 import retrofit2.http.Header
@@ -29,4 +31,18 @@ internal interface MessageService {
         @Path("channelId") channelId: String,
         @Query("unread") unread: Boolean?,
     ): Response<List<Message>>
+
+    @POST("/api/v1/channel/{channelId}/{sequenceId}")
+    suspend fun markMessageRead(
+        @Path("channelId") channelId: String,
+        @Path("sequenceId") sequenceId: String,
+        @Query("older") older: Boolean? = false,
+        @Body request: ReadRequest,
+    ): Response<List<Message>>
+
+    @DELETE("/api/v1/channel/{channelId}/{sequenceId}")
+    suspend fun deleteMessage(
+        @Path("channelId") channelId: String,
+        @Path("sequenceId") sequenceId: String,
+    ): Response<Unit>
 }

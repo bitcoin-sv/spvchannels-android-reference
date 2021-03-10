@@ -2,6 +2,7 @@ package com.nchain.spvchannels.messages
 
 import com.nchain.spvchannels.messages.models.ContentType
 import com.nchain.spvchannels.messages.models.Message
+import com.nchain.spvchannels.messages.models.ReadRequest
 import com.nchain.spvchannels.response.Status
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.withContext
@@ -35,6 +36,24 @@ class Messaging internal constructor(
     ): Status<List<Message>> = withContext(context) {
         Status.fromResponse(
             messageService.getMessages(channelId, unreadOnly)
+        )
+    }
+
+    suspend fun markMessageRead(
+        sequenceId: String,
+        read: Boolean,
+        markOlder: Boolean? = null
+    ): Status<List<Message>> = withContext(context) {
+        Status.fromResponse(
+            messageService.markMessageRead(channelId, sequenceId, markOlder, ReadRequest(read))
+        )
+    }
+
+    suspend fun deleteMessage(
+        sequenceId: String,
+    ): Status<Unit> = withContext(context) {
+        Status.fromResponse(
+            messageService.deleteMessage(channelId, sequenceId)
         )
     }
 }

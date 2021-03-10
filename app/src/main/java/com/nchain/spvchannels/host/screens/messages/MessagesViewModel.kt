@@ -22,6 +22,11 @@ class MessagesViewModel @Inject constructor(
 
     override val options = listOf(
         Option(
+            R.string.msg_get_max_sequence,
+            listOf(),
+            this::getMaxSequence
+        ),
+        Option(
             R.string.msg_send_message,
             listOf(
                 R.id.tv_type,
@@ -30,9 +35,15 @@ class MessagesViewModel @Inject constructor(
                 R.id.et_message,
             ),
             this::sendMessage
-        )
+        ),
     )
     override val state = ViewState()
+
+    private fun getMaxSequence() = launchCatching {
+        val result = messages.getMaxSequence()
+
+        setResponseText(result)
+    }
 
     private fun sendMessage() = launchCatching {
         val state = messages.sendMessage(

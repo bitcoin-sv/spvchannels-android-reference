@@ -6,6 +6,7 @@ import com.nchain.spvchannels.host.R
 import com.nchain.spvchannels.host.logging.ObjectSerializer
 import com.nchain.spvchannels.host.options.Option
 import com.nchain.spvchannels.host.screens.multipurpose.MultiPurposeScreenViewModel
+import com.nchain.spvchannels.messages.models.ContentType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -20,12 +21,25 @@ class MessagesViewModel @Inject constructor(
     }
 
     override val options = listOf(
-        // TODO: replace with actual option - at least one needs to be present
         Option(
-            R.string.app_name,
-            listOf(),
-            {}
+            R.string.msg_send_message,
+            listOf(
+                R.id.tv_type,
+                R.id.et_type,
+                R.id.tv_message,
+                R.id.et_message,
+            ),
+            this::sendMessage
         )
     )
     override val state = ViewState()
+
+    private fun sendMessage() = launchCatching {
+        val state = messages.sendMessage(
+            ContentType(state.contentType),
+            state.message.toByteArray()
+        )
+
+        setResponseText(state)
+    }
 }

@@ -1,5 +1,6 @@
 package com.nchain.spvchannels.host.logging
 
+import com.nchain.spvchannels.datetime.IsoDateTimeConverter
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
 import javax.inject.Inject
@@ -9,6 +10,7 @@ import okio.Buffer
 @Singleton
 class ObjectSerializer @Inject constructor() {
     private val moshi = Moshi.Builder()
+        .add(IsoDateTimeConverter())
         .build()
 
     fun <T> logTyped(value: T?, clazz: Class<T>, pretty: Boolean): String? {

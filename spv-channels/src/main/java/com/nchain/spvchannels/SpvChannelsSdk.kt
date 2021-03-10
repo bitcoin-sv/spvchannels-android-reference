@@ -2,13 +2,16 @@ package com.nchain.spvchannels
 
 import com.nchain.spvchannels.channels.BasicAuthInterceptor
 import com.nchain.spvchannels.channels.Channel
+import com.nchain.spvchannels.datetime.IsoDateTimeConverter
 import com.nchain.spvchannels.messages.BearerAuthInterceptor
 import com.nchain.spvchannels.messages.Messaging
+import com.squareup.moshi.Moshi
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -70,7 +73,7 @@ class SpvChannelsSdk(private val baseUrl: String) {
         return Retrofit.Builder()
             .client(client)
             .baseUrl(baseUrl)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(createMoshi())
             .build()
     }
 
@@ -95,5 +98,15 @@ class SpvChannelsSdk(private val baseUrl: String) {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         return interceptor
+    }
+
+    /**
+     * Creates a [Converter.Factory] for serialization using Moshi
+     */
+    private fun createMoshi(): Converter.Factory {
+        val moshi = Moshi.Builder()
+            .add(IsoDateTimeConverter())
+            .build()
+        return MoshiConverterFactory.create(moshi)
     }
 }

@@ -2,6 +2,8 @@ package com.nchain.spvchannels
 
 import com.nchain.spvchannels.channels.BasicAuthInterceptor
 import com.nchain.spvchannels.channels.Channel
+import com.nchain.spvchannels.messages.BearerAuthInterceptor
+import com.nchain.spvchannels.messages.Messaging
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Interceptor
@@ -37,6 +39,26 @@ class SpvChannelsSdk(private val baseUrl: String) {
         val retrofit = createRetrofit(client)
 
         return Channel(retrofit.create(), accountId, coroutineContext)
+    }
+
+    /**
+     * Creates and returns a new [Messaging] object for a given channelId, authorized by token.
+     *
+     * @param channelId the id of the channel to create a messaging object for
+     * @param token the token to use for authorization
+     * @param coroutineContext the coroutine context to use for the requests, Dispatchers.IO is
+     * the default and should provide the desired functionality, should be replaced by your test
+     * dispatcher in unit tests.
+     */
+    fun messagingWithToken(
+        channelId: String,
+        token: String,
+        coroutineContext: CoroutineContext = Dispatchers.IO
+    ): Messaging {
+        val client = createClient(BearerAuthInterceptor(token))
+        val retrofit = createRetrofit(client)
+
+        return Messaging(retrofit.create(), channelId, coroutineContext)
     }
 
     /**

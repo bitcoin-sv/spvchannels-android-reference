@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class CreateRequest(
+internal data class CreateRequest(
     @Json(name = "public_read") val publicRead: Boolean,
     @Json(name = "public_write") val publicWrite: Boolean,
     @Json(name = "sequenced") val sequenced: Boolean,

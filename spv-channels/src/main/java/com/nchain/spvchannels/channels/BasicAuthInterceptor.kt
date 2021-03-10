@@ -13,7 +13,7 @@ import okhttp3.Response
  *
  * @throws IllegalArgumentException if either username or password is an empty string
  */
-class BasicAuthInterceptor(username: String, password: String) : Interceptor {
+internal class BasicAuthInterceptor(username: String, password: String) : Interceptor {
     private val credentials: String
 
     init {

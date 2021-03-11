@@ -11,6 +11,7 @@ import okio.Buffer
 class ObjectSerializer @Inject constructor() {
     private val moshi = Moshi.Builder()
         .add(IsoDateTimeConverter())
+        .add(MessageAdapter())
         .build()
 
     fun <T> logTyped(value: T?, clazz: Class<T>, pretty: Boolean): String? {

@@ -3,6 +3,8 @@ package com.nchain.spvchannels
 import com.nchain.spvchannels.channels.BasicAuthInterceptor
 import com.nchain.spvchannels.channels.Channel
 import com.nchain.spvchannels.datetime.IsoDateTimeConverter
+import com.nchain.spvchannels.encryption.Encryption
+import com.nchain.spvchannels.encryption.NoOpEncryption
 import com.nchain.spvchannels.messages.BearerAuthInterceptor
 import com.nchain.spvchannels.messages.Messaging
 import com.squareup.moshi.Moshi
@@ -56,12 +58,13 @@ class SpvChannelsSdk(private val baseUrl: String) {
     fun messagingWithToken(
         channelId: String,
         token: String,
+        encryption: Encryption = NoOpEncryption(),
         coroutineContext: CoroutineContext = Dispatchers.IO
     ): Messaging {
         val client = createClient(BearerAuthInterceptor(token))
         val retrofit = createRetrofit(client)
 
-        return Messaging(retrofit.create(), channelId, coroutineContext)
+        return Messaging(retrofit.create(), channelId, encryption, coroutineContext)
     }
 
     /**

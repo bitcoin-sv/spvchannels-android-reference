@@ -1,7 +1,8 @@
 package com.nchain.spvchannels.messages
 
+import com.nchain.spvchannels.encryption.Encryption
+import com.nchain.spvchannels.encryption.RawMessage
 import com.nchain.spvchannels.messages.models.ContentType
-import com.nchain.spvchannels.messages.models.Message
 import com.nchain.spvchannels.messages.models.ReadRequest
 import com.nchain.spvchannels.response.Status
 import kotlin.coroutines.CoroutineContext
@@ -10,6 +11,7 @@ import kotlinx.coroutines.withContext
 class Messaging internal constructor(
     private val messageService: MessageService,
     private val channelId: String,
+    private val encryption: Encryption,
     private val context: CoroutineContext,
 ) {
     suspend fun getMaxSequence(): Status<String> = withContext(context) {
@@ -23,20 +25,22 @@ class Messaging internal constructor(
     suspend fun sendMessage(
         contentType: ContentType,
         message: ByteArray
-    ): Status<Message> = withContext(context) {
+    ): Status<RawMessage> = withContext(context) {
         Status.fromResponse(
             messageService.sendMessage(
-                channelId, contentType.mediaType, message
+                channelId, contentType.mediaType, encryption.encrypt(message)
             )
-        )
+        ) { RawMessage(it, encryption) }
     }
 
     suspend fun getAllMessages(
-        unreadOnly: Boolean? = null
-    ): Status<List<Message>> = withContext(context) {
+        unreadOnly: Boolean = true
+    ): Status<List<RawMessage>> = withContext(context) {
         Status.fromResponse(
             messageService.getMessages(channelId, unreadOnly)
-        )
+        ) {
+            it.map { message -> RawMessage(message, encryption) }
+        }
     }
 
     suspend fun markMessageRead(

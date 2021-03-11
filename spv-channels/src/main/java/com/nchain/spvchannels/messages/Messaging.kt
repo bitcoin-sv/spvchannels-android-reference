@@ -43,7 +43,7 @@ class Messaging internal constructor(
         sequenceId: String,
         read: Boolean,
         markOlder: Boolean? = null
-    ): Status<List<Message>> = withContext(context) {
+    ): Status<Unit> = withContext(context) {
         Status.fromResponse(
             messageService.markMessageRead(channelId, sequenceId, markOlder, ReadRequest(read))
         )

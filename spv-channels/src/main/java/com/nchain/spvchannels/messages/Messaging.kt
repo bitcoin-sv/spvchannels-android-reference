@@ -7,6 +7,7 @@ import com.nchain.spvchannels.messages.models.ReadRequest
 import com.nchain.spvchannels.response.Status
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.withContext
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class Messaging internal constructor(
     private val messageService: MessageService,
@@ -28,7 +29,7 @@ class Messaging internal constructor(
     ): Status<RawMessage> = withContext(context) {
         Status.fromResponse(
             messageService.sendMessage(
-                channelId, contentType.mediaType, encryption.encrypt(message)
+                channelId, encryption.encrypt(message).toRequestBody(contentType.mediaType)
             )
         ) { RawMessage(it, encryption) }
     }

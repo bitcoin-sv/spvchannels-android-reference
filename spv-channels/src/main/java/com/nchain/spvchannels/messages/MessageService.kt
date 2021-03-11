@@ -2,13 +2,12 @@ package com.nchain.spvchannels.messages
 
 import com.nchain.spvchannels.messages.models.Message
 import com.nchain.spvchannels.messages.models.ReadRequest
-import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HEAD
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -22,8 +21,7 @@ internal interface MessageService {
     @POST("/api/v1/channel/{channelId}")
     suspend fun sendMessage(
         @Path("channelId") channelId: String,
-        @Header("Content-Type") contentType: MediaType,
-        @Body message: ByteArray
+        @Body message: RequestBody
     ): Response<Message>
 
     @GET("/api/v1/channel/{channelId}")

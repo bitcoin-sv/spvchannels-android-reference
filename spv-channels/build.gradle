@@ -59,8 +59,6 @@ dependencies {
     // LibSodium
     implementation "com.goterl.lazycode:lazysodium-android:4.3.2@aar"
     implementation 'net.java.dev.jna:jna:5.7.0@aar'
-    testImplementation "com.goterl.lazycode:lazysodium-java:4.3.2"
-    testImplementation 'net.java.dev.jna:jna:5.7.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.6.28'

@@ -33,6 +33,12 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url  "https://dl.bintray.com/terl/lazysodium-maven"
+    }
+}
+
 dependencies {
     final retrofit_version = '2.9.0'
 
@@ -49,6 +55,10 @@ dependencies {
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    // LibSodium
+    implementation "com.goterl.lazycode:lazysodium-android:4.3.2@aar"
+    implementation 'net.java.dev.jna:jna:5.7.0@aar'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.6.28'

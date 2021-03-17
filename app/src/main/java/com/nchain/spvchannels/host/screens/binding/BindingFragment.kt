@@ -37,7 +37,8 @@ abstract class BindingFragment<Binding : ViewDataBinding, ViewModel : CommonView
     override fun setArguments(args: Bundle?) {
         super.setArguments(
             args?.apply {
-                putBundle(BUNDLE_ARGS, args)
+                val navArgs = Bundle(args)
+                putBundle(BUNDLE_ARGS, navArgs)
             }
         )
     }

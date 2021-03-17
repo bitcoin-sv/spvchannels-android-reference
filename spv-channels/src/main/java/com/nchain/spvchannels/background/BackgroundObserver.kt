@@ -1,0 +1,40 @@
+package com.nchain.spvchannels.background
+
+import android.content.ComponentCallbacks2
+import android.content.Context
+import android.content.res.Configuration
+import android.util.Log
+import java.lang.ref.WeakReference
+
+/**
+ * Used to monitor enter background and exit background events
+ */
+internal class BackgroundObserver(context: Context) : ComponentCallbacks2 {
+    private val listeners = mutableListOf<WeakReference<() -> Unit>>()
+
+    init {
+        context.applicationContext.registerComponentCallbacks(this)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+    }
+
+    override fun onLowMemory() {
+    }
+
+    override fun onTrimMemory(level: Int) {
+        if (level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            Log.d("BG", "Entered background")
+            listeners.removeAll { it.get() == null }
+            listeners.forEach { it.get()?.invoke() }
+        }
+    }
+
+    /**
+     * Captures a weak reference to the callback. The callback will be invoked when the app
+     * enters background.
+     */
+    fun addOnEnterBackgroundCallback(listener: () -> Unit) {
+        listeners.add(WeakReference(listener))
+    }
+}

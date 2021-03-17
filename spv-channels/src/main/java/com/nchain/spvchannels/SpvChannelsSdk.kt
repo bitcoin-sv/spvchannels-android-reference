@@ -1,10 +1,14 @@
 package com.nchain.spvchannels
 
+import android.content.Context
+import android.util.Log
+import com.nchain.spvchannels.background.BackgroundObserver
 import com.nchain.spvchannels.channels.BasicAuthInterceptor
 import com.nchain.spvchannels.channels.Channel
 import com.nchain.spvchannels.datetime.IsoDateTimeConverter
 import com.nchain.spvchannels.encryption.Encryption
 import com.nchain.spvchannels.encryption.NoOpEncryption
+import com.nchain.spvchannels.firebase.FirebaseConfig
 import com.nchain.spvchannels.messages.BearerAuthInterceptor
 import com.nchain.spvchannels.messages.Messaging
 import com.squareup.moshi.Moshi
@@ -21,9 +25,21 @@ import retrofit2.create
 /**
  * SPV Channels main entry point. Provides access to Channels and Messaging APIs.
  *
+ * @param context context required to obtain lifecycle events
  * @param baseUrl the base url of the SPV channels server
  */
-class SpvChannelsSdk(private val baseUrl: String) {
+class SpvChannelsSdk(
+    context: Context,
+    private val firebase: FirebaseConfig,
+    private val baseUrl: String
+) {
+    init {
+        if (observer == null) {
+            observer = BackgroundObserver(context)
+        }
+        observer?.addOnEnterBackgroundCallback(this::reportToken)
+    }
+
     /**
      * Creates and returns a new [Channel] object with given credentials.
      *
@@ -111,5 +127,17 @@ class SpvChannelsSdk(private val baseUrl: String) {
             .add(IsoDateTimeConverter())
             .build()
         return MoshiConverterFactory.create(moshi)
+    }
+
+    /**
+     * Reports the token if required.
+     */
+    private fun reportToken() {
+        Log.d("BG", "Reporting token")
+        firebase.updateTokenIfNeeded()
+    }
+
+    private companion object {
+        var observer: BackgroundObserver? = null
     }
 }

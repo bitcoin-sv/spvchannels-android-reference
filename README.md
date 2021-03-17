@@ -8,6 +8,17 @@ It contains the Android client library for interacting with the server.
 This SDK can only be used as part of Android projects, and as such also requires a recent JDK to
 build (should be provided by an installation of Android Studio).
 
+In order to connect to a server with a self-signed certificate, put a certificate PEM with name "sslcert" in app/src/main/res/raw.
+In order to use firebase create a file named app/firebase.gradle, with contents like following:
+
+```groovy
+ext.Firebase = [
+    projectId: "<your project id>",
+    appId: "<your app id>",
+    apiKey: "<your api key>",
+]
+```
+
 ## Building
 
 ### Building from Android Studio

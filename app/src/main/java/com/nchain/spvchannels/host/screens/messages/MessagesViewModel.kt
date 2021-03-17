@@ -1,7 +1,7 @@
 package com.nchain.spvchannels.host.screens.messages
 
 import androidx.lifecycle.SavedStateHandle
-import com.nchain.spvchannels.SpvChannelsSdk
+import com.nchain.spvchannels.host.ChannelsSdkHolder
 import com.nchain.spvchannels.host.R
 import com.nchain.spvchannels.host.logging.ObjectSerializer
 import com.nchain.spvchannels.host.options.Option
@@ -14,11 +14,11 @@ import javax.inject.Inject
 class MessagesViewModel @Inject constructor(
     objectSerializer: ObjectSerializer,
     savedStateHandle: SavedStateHandle,
+    channelsSdkHolder: ChannelsSdkHolder,
 ) : MultiPurposeScreenViewModel<ViewState>(objectSerializer, savedStateHandle) {
     private val args by navArgs<MessagesFragmentArgs>()
-    private val messages by lazy {
-        SpvChannelsSdk(args.baseUrl).messagingWithToken(args.channelId, args.token)
-    }
+    private val messages = channelsSdkHolder.sdkForUrl(args.baseUrl)
+        .messagingWithToken(args.channelId, args.token)
 
     override val options = listOf(
         Option(

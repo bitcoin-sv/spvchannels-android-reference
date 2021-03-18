@@ -109,6 +109,16 @@ class LibSodiumEncryption private constructor(
         }
 
         /**
+         * Sets the encryption key used when encrypting. If this is not provided the provided or
+         * generated publicKey is used.
+         *
+         * @param key raw byte representation of the encryption key
+         */
+        fun encryptionKey(key: ByteArray) {
+            encryptionKey = Key.fromBytes(key)
+        }
+
+        /**
          * Generate new keys when building [LibSodiumEncryption]. Mutually exclusive with [withKeyPair].
          */
         fun generate(): Builder {

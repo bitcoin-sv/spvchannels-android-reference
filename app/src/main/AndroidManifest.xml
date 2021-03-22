@@ -20,7 +20,7 @@
         </activity>
 
         <service
-            android:name="com.nchain.spvchannels.firebase.SpvFirebaseService"
+            android:name="com.nchain.spvchannels.firebase.DefaultSpvMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

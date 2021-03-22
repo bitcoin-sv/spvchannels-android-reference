@@ -15,6 +15,9 @@ class Channel internal constructor(
     private val accountId: String,
     private val context: CoroutineContext,
 ) {
+    /**
+     * Returns a list of all Channels
+     */
     suspend fun getAllChannels(): Status<List<ChannelInfo>> = withContext(context) {
         Status.fromResponse(
             service.getAllChannels(accountId)
@@ -23,6 +26,14 @@ class Channel internal constructor(
         }
     }
 
+    /**
+     * Creates a new Channel, owned by the account holder.
+     *
+     * @param publicRead whether the channel is readable
+     * @param publicWrite whether the channel can be written to
+     * @param sequenced whether the channel should be sequenced
+     * @param retention the settings for channel messages retention
+     */
     suspend fun createChannel(
         publicRead: Boolean,
         publicWrite: Boolean,
@@ -37,6 +48,19 @@ class Channel internal constructor(
         )
     }
 
+    /**
+     * Updates Channel metadata and permissions (read/write and locking a channel)
+     *
+     * Locked channel definition:
+     *  - writing to a locked channel is not allowed
+     *  - reading from a locked channel is allowed
+     *  - restrictions are implemented on server side
+     *
+     * @param channelId the channel to amend
+     * @param publicRead whether the channel is readable
+     * @param publicWrite whether the channel can be written to
+     * @param locked whether or not the channel is locked
+     */
     suspend fun amendChannel(
         channelId: String,
         publicRead: Boolean,
@@ -52,18 +76,34 @@ class Channel internal constructor(
         )
     }
 
+    /**
+     * Returns the information specific to the channel.
+     *
+     * @param channelId the channel to retrieve the information for
+     */
     suspend fun getChannel(channelId: String): Status<ChannelInfo> = withContext(context) {
         Status.fromResponse(
             service.getChannel(accountId, channelId)
         )
     }
 
+    /**
+     * Deletes the specified channel.
+     *
+     * @param channelId the channel to delete
+     */
     suspend fun deleteChannel(channelId: String): Status<Unit> = withContext(context) {
         Status.fromResponse(
             service.deleteChannel(accountId, channelId)
         )
     }
 
+    /**
+     * Returns a list of channel tokens. Can be made to filter on a specific token value.
+     *
+     * @param channelId the channel to return the tokens for
+     * @param token optional token parameter to filter for
+     */
     suspend fun getChannelTokens(
         channelId: String,
         token: String? = null
@@ -73,6 +113,12 @@ class Channel internal constructor(
         )
     }
 
+    /**
+     * Returns the information for a single token.
+     *
+     * @param channelId the channel where the token exists
+     * @param token the token to retrieve the information for
+     */
     suspend fun getTokenInfo(
         channelId: String,
         token: String,
@@ -82,6 +128,14 @@ class Channel internal constructor(
         )
     }
 
+    /**
+     * Generate a new API token for the given channel.
+     *
+     * @param channelId the channel for which to generate a token for
+     * @param description the description for the token
+     * @param canRead whether or not the token has the read permission
+     * @param canWrite whether or not the token has the write permission
+     */
     suspend fun createToken(
         channelId: String,
         description: String,
@@ -97,6 +151,12 @@ class Channel internal constructor(
         )
     }
 
+    /**
+     * Used to revoke the specific token for the given channel.
+     *
+     * @param channelId the channel on which to revoke the token
+     * @param token the token to revoke
+     */
     suspend fun revokeToken(
         channelId: String,
         token: String,

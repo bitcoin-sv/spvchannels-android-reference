@@ -81,28 +81,36 @@ class FirebaseConfig private constructor(
          * Creates a new instance of [FirebaseConfig].
          */
         fun build(): FirebaseConfig {
-            val projectId = projectId
-            val applicationId = applicationId
-            val apiKey = apiKey
-            if (projectId == null || applicationId == null || apiKey == null) {
-                throw IllegalStateException(
-                    "Project ID, application ID and api key need to be provided."
-                )
+            val messaging = if (messaging != null) {
+                messaging!!
+            } else {
+                val projectId = projectId
+                val applicationId = applicationId
+                val apiKey = apiKey
+                if (projectId == null || applicationId == null || apiKey == null) {
+                    throw IllegalStateException(
+                        "Project ID, application ID and api key need to be provided."
+                    )
+                }
+                val options = FirebaseOptions.Builder()
+                    .setProjectId(projectId)
+                    .setApplicationId(applicationId)
+                    .setApiKey(apiKey)
+                    .build()
+                val app = FirebaseApp.initializeApp(context, options, CONFIG_NAME)
+                app.get(FirebaseMessaging::class.java)
             }
-            val options = FirebaseOptions.Builder()
-                .setProjectId(projectId)
-                .setApplicationId(applicationId)
-                .setApiKey(apiKey)
-                .build()
-            val app = FirebaseApp.initializeApp(context, options, "spv_channels")
-            val messaging = app.get(FirebaseMessaging::class.java)
             return FirebaseConfig(
                 messaging,
                 TokenStorage(
                     context.getSharedPreferences(applicationId, Context.MODE_PRIVATE),
-                    applicationId
+                    applicationId ?: "default"
                 )
             )
         }
+    }
+
+    companion object {
+        internal const val CONFIG_NAME = "spv_channels"
     }
 }

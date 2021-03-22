@@ -26,6 +26,7 @@ import retrofit2.create
  * SPV Channels main entry point. Provides access to Channels and Messaging APIs.
  *
  * @param context context required to obtain lifecycle events
+ * @param firebase the firebase configuration to use for messaging.
  * @param baseUrl the base url of the SPV channels server
  */
 class SpvChannelsSdk(

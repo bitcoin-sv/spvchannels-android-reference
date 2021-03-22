@@ -97,7 +97,7 @@ afterEvaluate {
         publications {
             mavenJava(MavenPublication) {
                 groupId 'com.nchain'
-                artifactId 'spvchannels'
+                artifactId 'spvchannels-android'
                 version project.ext.version
 
                 artifact bundleReleaseAar

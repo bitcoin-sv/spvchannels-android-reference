@@ -22,6 +22,10 @@ internal class BackgroundObserver(context: Context) : ComponentCallbacks2 {
     override fun onLowMemory() {
     }
 
+    /**
+     * If TRIM_MEMORY_UI_HIDDEN is sent, that means that the app UI is no longer visible, ergo
+     * the app entered background.
+     */
     override fun onTrimMemory(level: Int) {
         if (level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
             Log.d("BG", "Entered background")

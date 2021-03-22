@@ -4,6 +4,9 @@ import android.util.Base64
 import com.nchain.spvchannels.messages.models.Message
 import java.util.Calendar
 
+/**
+ * Represents the raw (decrypted) message.
+ */
 class RawMessage(
     val sequence: Int,
     val date: Calendar,

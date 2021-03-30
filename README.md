@@ -57,7 +57,7 @@ After adding the repository, the SDK can be used like any other gradle dependenc
 ```groovy
 dependencies {
     // ... other libraries
-    implementation 'com.nchain:spv-channels:<version>'
+    implementation 'io.bitcoinsv:spv-channels:<version>'
 }
 ```
 
@@ -69,7 +69,7 @@ AndroidManifest.xml, inside the application tag:
 
 ```xml
 <service
-    android:name="com.nchain.spvchannels.firebase.DefaultSpvMessagingService"
+    android:name="io.bitcoinsv.spvchannels.firebase.DefaultSpvMessagingService"
     android:exported="false">
     <intent-filter>
         <action android:name="com.google.firebase.MESSAGING_EVENT" />

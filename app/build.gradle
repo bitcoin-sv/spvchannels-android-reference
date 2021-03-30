@@ -13,7 +13,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.nchain.spvchannels.host"
+        applicationId "io.bitcoinsv.spvchannels.host"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1

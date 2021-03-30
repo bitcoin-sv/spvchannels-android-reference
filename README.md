@@ -37,10 +37,10 @@ You can also optionally use `:spv-channels:assembleDebug` or `:spv-channels:asse
 
 Distribution that is currently set up is for maven local. You can publish a build by running `./gradlew :spv-channels:publishToMavenLocal` on *nix OS, or `gradle.bat :spv-channels:publishToMavenLocal` on Windows.
 This will distribute the following:
-- spv-channels-<version>.aar
-- spv-channels-<version>-javadoc.jar
-- spv-channels-<version>-sources.jar
-- spv-channels-<version>.pom
+- spvchannels-android-<version>.aar
+- spvchannels-android-android-<version>-javadoc.jar
+- spvchannels-android-<version>-sources.jar
+- spvchannels-android-<version>.pom
 
 After installing you can use the `mavenLocal()` declaration in repositories block:
 
@@ -57,7 +57,7 @@ After adding the repository, the SDK can be used like any other gradle dependenc
 ```groovy
 dependencies {
     // ... other libraries
-    implementation 'com.nchain:spv-channels:<version>'
+    implementation 'io.bitcoinsv:spvchannels-android:<version>'
 }
 ```
 
@@ -69,7 +69,7 @@ AndroidManifest.xml, inside the application tag:
 
 ```xml
 <service
-    android:name="com.nchain.spvchannels.firebase.DefaultSpvMessagingService"
+    android:name="io.bitcoinsv.spvchannels.firebase.DefaultSpvMessagingService"
     android:exported="false">
     <intent-filter>
         <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -26,7 +26,7 @@ subprojects {
         google()
         jcenter()
         maven {
-            url  "https://dl.bintray.com/terl/lazysodium-maven"
+            url "https://dl.bintray.com/terl/lazysodium-maven"
         }
     }
 
@@ -37,8 +37,7 @@ subprojects {
             targetExclude("$buildDir/**/*.kt")
             targetExclude('bin/**/*.kt')
             ktlint("0.40.0").userData([android: "true"])
-            licenseHeader '''
-// Copyright (c) $YEAR Bitcoin Association.
+            licenseHeader '''// Copyright (c) $YEAR Bitcoin Association.
 // Distributed under the Open BSV software license, see the accompanying file LICENSE
 '''
         }

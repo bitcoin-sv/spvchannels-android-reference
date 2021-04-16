@@ -14,8 +14,11 @@ import io.bitcoinsv.spvchannels.encryption.NoOpEncryption
 import io.bitcoinsv.spvchannels.firebase.FirebaseConfig
 import io.bitcoinsv.spvchannels.messages.BearerAuthInterceptor
 import io.bitcoinsv.spvchannels.messages.Messaging
+import io.bitcoinsv.spvchannels.notifications.NotificationService
+import io.bitcoinsv.spvchannels.response.Status
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,11 +39,18 @@ class SpvChannelsSdk(
     private val firebase: FirebaseConfig,
     private val baseUrl: String
 ) {
+    private var notificationService: NotificationService
+
     init {
         if (observer == null) {
             observer = BackgroundObserver(context)
         }
         observer?.addOnEnterBackgroundCallback(this::reportToken)
+
+        val client = createClient()
+        val retrofit = createRetrofit(client)
+        notificationService = retrofit.create()
+        firebase.updater = notificationService::updateToken
     }
 
     /**
@@ -83,7 +93,23 @@ class SpvChannelsSdk(
         val client = createClient(BearerAuthInterceptor(token))
         val retrofit = createRetrofit(client)
 
-        return Messaging(retrofit.create(), channelId, encryption, coroutineContext)
+        return Messaging(
+            retrofit.create(),
+            notificationService,
+            channelId,
+            firebase::fetchToken,
+            encryption,
+            coroutineContext
+        )
+    }
+
+    /**
+     * Disables notifications for all channels.
+     */
+    suspend fun disableAllNotifications(
+        coroutineContext: CoroutineContext = Dispatchers.IO
+    ) = withContext(coroutineContext) {
+        Status.fromResponse(notificationService.deleteToken(firebase.fetchToken()))
     }
 
     /**

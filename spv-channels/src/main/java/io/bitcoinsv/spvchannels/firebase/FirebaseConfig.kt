@@ -6,6 +6,14 @@ import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.FirebaseMessaging
+import io.bitcoinsv.spvchannels.notifications.models.TokenRequest
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import retrofit2.Response
 
 /**
  * Creates a firebase configuration to use for background notifications.
@@ -14,6 +22,9 @@ class FirebaseConfig private constructor(
     private val messaging: FirebaseMessaging,
     private val storage: TokenStorage,
 ) {
+    var updater: (suspend (String, TokenRequest) -> Response<Void>)? = null
+    var updateJob: Job? = null
+
     init {
         messaging.isAutoInitEnabled = true
         updateTokenIfNeeded()
@@ -23,12 +34,26 @@ class FirebaseConfig private constructor(
      * Updates the token if it does not match the current one.
      */
     internal fun updateTokenIfNeeded() {
-        val oldToken = storage.token
+        if (updateJob?.isActive == true) return
+
+        val oldToken = storage.token ?: return
         messaging.token.addOnSuccessListener {
             if (oldToken == it) return@addOnSuccessListener
+            val updater = updater ?: return@addOnSuccessListener
 
             storage.token = it
-            // TODO: report new token
+            updateJob = GlobalScope.launch(Dispatchers.IO) {
+                updater(oldToken, TokenRequest(it))
+            }
+        }
+    }
+
+    /**
+     * Returns the current FCM token, fetching it if needed
+     */
+    internal suspend fun fetchToken(): String = suspendCoroutine { continuation ->
+        messaging.token.addOnSuccessListener {
+            continuation.resume(it)
         }
     }
 

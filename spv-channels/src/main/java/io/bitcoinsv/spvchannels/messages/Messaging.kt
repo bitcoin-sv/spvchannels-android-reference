@@ -6,6 +6,8 @@ import io.bitcoinsv.spvchannels.encryption.Encryption
 import io.bitcoinsv.spvchannels.encryption.RawMessage
 import io.bitcoinsv.spvchannels.messages.models.ContentType
 import io.bitcoinsv.spvchannels.messages.models.ReadRequest
+import io.bitcoinsv.spvchannels.notifications.NotificationService
+import io.bitcoinsv.spvchannels.notifications.models.TokenRequest
 import io.bitcoinsv.spvchannels.response.Status
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.withContext
@@ -18,7 +20,10 @@ import okhttp3.RequestBody.Companion.toRequestBody
  */
 class Messaging internal constructor(
     private val messageService: MessageService,
+    private val notificationService: NotificationService,
     private val channelId: String,
+    private val apiToken: String,
+    private val fetchToken: suspend () -> String,
     private val encryption: Encryption,
     private val context: CoroutineContext,
 ) {
@@ -92,6 +97,28 @@ class Messaging internal constructor(
     ): Status<Unit> = withContext(context) {
         Status.fromResponse(
             messageService.deleteMessage(channelId, sequenceId)
+        )
+    }
+
+    /**
+     * Register for push notifications.
+     */
+    suspend fun registerForNotifications() = withContext(context) {
+        val token = fetchToken()
+
+        Status.fromResponse(
+            notificationService.registerFcmToken("Bearer $apiToken", TokenRequest(token))
+        )
+    }
+
+    /**
+     * Deregister push notification for current channel.
+     */
+    suspend fun deregisterNotifications() = withContext(context) {
+        val token = fetchToken()
+
+        Status.fromResponse(
+            notificationService.deleteToken(token, channelId)
         )
     }
 }

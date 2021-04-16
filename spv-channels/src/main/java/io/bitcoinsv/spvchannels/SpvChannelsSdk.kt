@@ -97,6 +97,7 @@ class SpvChannelsSdk(
             retrofit.create(),
             notificationService,
             channelId,
+            token,
             firebase::fetchToken,
             encryption,
             coroutineContext

@@ -6,6 +6,7 @@ import io.bitcoinsv.spvchannels.notifications.models.TokenRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -15,7 +16,8 @@ import retrofit2.http.Query
 interface NotificationService {
     @POST("/api/v1/pushnotifications")
     suspend fun registerFcmToken(
-        @Body request: TokenRequest
+        @Header("Authorization") apiToken: String,
+        @Body request: TokenRequest,
     ): Response<Void>
 
     @PUT("/api/v1/pushnotifications/{oldtoken}")

@@ -22,6 +22,7 @@ class Messaging internal constructor(
     private val messageService: MessageService,
     private val notificationService: NotificationService,
     private val channelId: String,
+    private val apiToken: String,
     private val fetchToken: suspend () -> String,
     private val encryption: Encryption,
     private val context: CoroutineContext,
@@ -106,7 +107,7 @@ class Messaging internal constructor(
         val token = fetchToken()
 
         Status.fromResponse(
-            notificationService.registerFcmToken(TokenRequest(token))
+            notificationService.registerFcmToken("Bearer $apiToken", TokenRequest(token))
         )
     }
 

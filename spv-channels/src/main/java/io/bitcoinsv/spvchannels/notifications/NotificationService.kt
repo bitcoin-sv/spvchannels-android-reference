@@ -12,7 +12,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-// TODO: add authentication once it's decided on how it will work
 interface NotificationService {
     @POST("/api/v1/pushnotifications")
     suspend fun registerFcmToken(

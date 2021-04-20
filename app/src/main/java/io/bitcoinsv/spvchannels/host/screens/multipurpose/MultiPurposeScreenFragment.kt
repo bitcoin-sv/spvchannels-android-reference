@@ -24,6 +24,8 @@ abstract class MultiPurposeScreenFragment<Binding : ViewDataBinding,
         R.id.btn_perform,
         R.id.tv_response,
         R.id.tv_response_content,
+        R.id.btn_notifications,
+        R.id.cb_notifications,
     )
 
     protected abstract val layoutWrapper: ViewGroup

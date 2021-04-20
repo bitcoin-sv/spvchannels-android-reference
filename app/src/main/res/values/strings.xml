@@ -43,4 +43,6 @@
     <string name="msg_mark_read">Mark message as read/unread</string>
     <string name="msg_delete_message">Delete message</string>
     <string name="msg_message_id">Message ID</string>
+    <string name="msg_notifications_enabled">Notifications enabled</string>
+    <string name="action_disable_all_notifications">Disable all notifications</string>
 </resources>

@@ -19,7 +19,8 @@ class ChannelsViewModel @Inject constructor(
     channelsHolder: ChannelsSdkHolder,
 ) : MultiPurposeScreenViewModel<ViewState>(objectSerializer, savedStateHandle) {
     private val args by navArgs<ChannelsFragmentArgs>()
-    private val channels = channelsHolder.sdkForUrl(args.baseUrl).channelWithCredentials(
+    private val channelsSdk = channelsHolder.sdkForUrl(args.baseUrl)
+    private val channels = channelsSdk.channelWithCredentials(
         args.accountId,
         args.username,
         args.password
@@ -113,6 +114,12 @@ class ChannelsViewModel @Inject constructor(
         ),
     )
     override val state = ViewState()
+
+    fun disableAllNotifications() = launchCatching {
+        val response = channelsSdk.disableAllNotifications()
+
+        setResponseText(response)
+    }
 
     private fun listChannels() = launchCatching {
         val response = channels.getAllChannels()

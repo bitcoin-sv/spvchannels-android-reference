@@ -36,6 +36,10 @@ class Storage @Inject constructor(@ApplicationContext context: Context) {
         get() = preferences.getString(TOKEN, null) ?: ""
         set(value) = preferences.edit { putString(TOKEN, value) }
 
+    var notificationsEnabled: Boolean
+        get() = preferences.getBoolean(NOTIFICATIONS, false)
+        set(value) = preferences.edit { putBoolean(NOTIFICATIONS, value) }
+
     companion object {
         private const val NAME = "input_storage"
         private const val URL = "url"
@@ -44,5 +48,6 @@ class Storage @Inject constructor(@ApplicationContext context: Context) {
         private const val PASSWORD = "password"
         private const val CHANNEL_ID = "channel_id"
         private const val TOKEN = "token"
+        private const val NOTIFICATIONS = "notifications"
     }
 }

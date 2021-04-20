@@ -9,7 +9,9 @@ import io.bitcoinsv.spvchannels.host.R
 import io.bitcoinsv.spvchannels.host.logging.ObjectSerializer
 import io.bitcoinsv.spvchannels.host.options.Option
 import io.bitcoinsv.spvchannels.host.screens.multipurpose.MultiPurposeScreenViewModel
+import io.bitcoinsv.spvchannels.host.storage.Storage
 import io.bitcoinsv.spvchannels.messages.models.ContentType
+import io.bitcoinsv.spvchannels.response.Status
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +19,7 @@ class MessagesViewModel @Inject constructor(
     objectSerializer: ObjectSerializer,
     savedStateHandle: SavedStateHandle,
     channelsSdkHolder: ChannelsSdkHolder,
+    private val storage: Storage,
 ) : MultiPurposeScreenViewModel<ViewState>(objectSerializer, savedStateHandle) {
     private val args by navArgs<MessagesFragmentArgs>()
     private val messages = channelsSdkHolder.sdkForUrl(args.baseUrl)
@@ -65,6 +68,21 @@ class MessagesViewModel @Inject constructor(
         ),
     )
     override val state = ViewState()
+
+    fun getNotificationsEnabled() = storage.notificationsEnabled
+
+    fun setNotificationsEnabled(enabled: Boolean) = launchCatching {
+        val result = if (enabled) {
+            messages.registerForNotifications()
+        } else {
+            messages.deregisterNotifications()
+        }
+
+        setResponseText(result)
+        if (result is Status.Success) {
+            storage.notificationsEnabled = enabled
+        }
+    }
 
     private fun getMaxSequence() = launchCatching {
         val result = messages.getMaxSequence()

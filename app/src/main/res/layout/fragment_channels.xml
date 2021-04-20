@@ -133,6 +133,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/msg_create_channel" />
 
+            <Button
+                android:id="@+id/btn_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{_ -> viewModel.disableAllNotifications()}"
+                android:text="@string/action_disable_all_notifications" />
+
             <TextView
                 android:id="@+id/tv_response"
                 android:layout_width="match_parent"

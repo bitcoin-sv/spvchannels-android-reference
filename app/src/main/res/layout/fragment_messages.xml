@@ -93,6 +93,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/msg_create_channel" />
 
+            <CheckBox
+                android:id="@+id/cb_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.notificationsEnabled}"
+                android:text="@string/msg_notifications_enabled" />
+
             <TextView
                 android:id="@+id/tv_response"
                 android:layout_width="match_parent"

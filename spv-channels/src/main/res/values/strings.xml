@@ -2,4 +2,5 @@
 <resources>
 
     <string name="title_channel_name">SPV channels</string>
+    <string name="title_notification">SPV channels</string>
 </resources>

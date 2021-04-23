@@ -124,7 +124,12 @@ class FirebaseConfig private constructor(
                     .setApplicationId(applicationId)
                     .setApiKey(apiKey)
                     .build()
-                val app = FirebaseApp.initializeApp(context, options, CONFIG_NAME)
+                val name = if (FirebaseApp.getApps(context).isEmpty()) {
+                    FirebaseApp.DEFAULT_APP_NAME
+                } else {
+                    CONFIG_NAME
+                }
+                val app = FirebaseApp.initializeApp(context, options, name)
                 app.get(FirebaseMessaging::class.java)
             }
             return FirebaseConfig(

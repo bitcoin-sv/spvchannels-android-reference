@@ -4,8 +4,10 @@ package io.bitcoinsv.spvchannels.messages
 
 import io.bitcoinsv.spvchannels.encryption.Encryption
 import io.bitcoinsv.spvchannels.encryption.RawMessage
+import io.bitcoinsv.spvchannels.firebase.DefaultSpvMessagingService
 import io.bitcoinsv.spvchannels.messages.models.ContentType
 import io.bitcoinsv.spvchannels.messages.models.ReadRequest
+import io.bitcoinsv.spvchannels.notifications.Notification
 import io.bitcoinsv.spvchannels.notifications.NotificationService
 import io.bitcoinsv.spvchannels.notifications.models.TokenRequest
 import io.bitcoinsv.spvchannels.response.Status
@@ -102,8 +104,13 @@ class Messaging internal constructor(
 
     /**
      * Register for push notifications.
+     *
+     * @param listener the listener that will receive notifications when the app is in foreground
      */
-    suspend fun registerForNotifications() = withContext(context) {
+    suspend fun registerForNotifications(
+        listener: (Notification) -> Unit
+    ) = withContext(context) {
+        DefaultSpvMessagingService.registerForNotifications(channelId, listener)
         val token = fetchToken()
 
         Status.fromResponse(

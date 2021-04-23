@@ -38,6 +38,7 @@ abstract class MultiPurposeScreenViewModel<State : CommonViewState>(
             Status.ServerError -> "Server error"
             Status.Unauthorized -> "Unauthorized"
             Status.NoContent -> "No content"
+            Status.Conflict -> "Messages need to be marked as read before posting new ones."
             else -> response.toString()
         }
     }

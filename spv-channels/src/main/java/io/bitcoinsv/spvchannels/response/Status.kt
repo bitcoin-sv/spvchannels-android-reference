@@ -37,6 +37,13 @@ sealed class Status<out T> {
     object NotFound : Status<Nothing>()
 
     /**
+     * The Channel was created as sequenced, and the API token associated with the request has not
+     * marked as read the latest messages in the stream. The client must catch up then, if it is
+     * still appropriate, retry the write attempt.
+     */
+    object Conflict : Status<Nothing>()
+
+    /**
      * The server returned an error that we did not expect.
      */
     object ServerError : Status<Nothing>()
@@ -66,6 +73,7 @@ sealed class Status<out T> {
                 HttpURLConnection.HTTP_FORBIDDEN -> Forbidden
                 HttpURLConnection.HTTP_NOT_FOUND -> NotFound
                 HttpURLConnection.HTTP_INTERNAL_ERROR -> ServerError
+                HttpURLConnection.HTTP_CONFLICT -> Conflict
                 else -> ServerError
             }
         }

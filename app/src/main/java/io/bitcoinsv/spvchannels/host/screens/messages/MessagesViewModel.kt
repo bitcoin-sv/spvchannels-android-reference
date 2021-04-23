@@ -3,6 +3,7 @@
 package io.bitcoinsv.spvchannels.host.screens.messages
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.bitcoinsv.spvchannels.host.ChannelsSdkHolder
 import io.bitcoinsv.spvchannels.host.R
@@ -10,9 +11,13 @@ import io.bitcoinsv.spvchannels.host.logging.ObjectSerializer
 import io.bitcoinsv.spvchannels.host.options.Option
 import io.bitcoinsv.spvchannels.host.screens.multipurpose.MultiPurposeScreenViewModel
 import io.bitcoinsv.spvchannels.host.storage.Storage
+import io.bitcoinsv.spvchannels.host.util.Event
 import io.bitcoinsv.spvchannels.messages.models.ContentType
+import io.bitcoinsv.spvchannels.notifications.Notification
 import io.bitcoinsv.spvchannels.response.Status
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.map
 
 @HiltViewModel
 class MessagesViewModel @Inject constructor(
@@ -24,6 +29,8 @@ class MessagesViewModel @Inject constructor(
     private val args by navArgs<MessagesFragmentArgs>()
     private val messages = channelsSdkHolder.sdkForUrl(args.baseUrl)
         .messagingWithToken(args.channelId, args.token)
+    private val notificationFlow = MutableSharedFlow<Notification>()
+    val notification = notificationFlow.map { Event(it) }.asLiveData()
 
     override val options = listOf(
         Option(
@@ -73,7 +80,9 @@ class MessagesViewModel @Inject constructor(
 
     fun setNotificationsEnabled(enabled: Boolean) = launchCatching {
         val result = if (enabled) {
-            messages.registerForNotifications()
+            messages.registerForNotifications {
+                notificationFlow.emitInScope(it)
+            }
         } else {
             messages.deregisterNotifications()
         }

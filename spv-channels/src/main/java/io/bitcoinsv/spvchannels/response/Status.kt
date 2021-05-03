@@ -3,6 +3,8 @@
 package io.bitcoinsv.spvchannels.response
 
 import java.net.HttpURLConnection
+import okhttp3.ResponseBody
+import retrofit2.Converter
 import retrofit2.Response
 
 /**
@@ -14,6 +16,12 @@ sealed class Status<out T> {
      * containing the [value], depending on the endpoint that was used.
      */
     data class Success<T>(val value: T) : Status<T>()
+
+    /**
+     * Returned when invalid data was sent to the server. Contains [error] to describe the reason
+     * for failure.
+     */
+    data class InvalidRequest(val error: String) : Status<Nothing>()
 
     /**
      * If the server returned no content. Some endpoints expect no return body.
@@ -52,14 +60,18 @@ sealed class Status<out T> {
         /**
          * Maps the response from Retrofit to a Status object.
          */
-        internal fun <T> fromResponse(response: Response<T>): Status<T> {
-            return fromResponse(response) { it }
+        internal fun <T> fromResponse(
+            converter: Converter<ResponseBody, ChannelsError>,
+            response: Response<T>
+        ): Status<T> {
+            return fromResponse(converter, response) { it }
         }
 
         /**
          * Maps the response from Retrofit to a Status object, using the provided mapping function.
          */
         internal fun <T, R> fromResponse(
+            converter: Converter<ResponseBody, ChannelsError>,
             response: Response<T>,
             mapper: (T) -> R
         ): Status<R> {
@@ -69,6 +81,7 @@ sealed class Status<out T> {
             }
 
             return when (response.code()) {
+                HttpURLConnection.HTTP_BAD_REQUEST -> parseBadRequest(converter, response)
                 HttpURLConnection.HTTP_UNAUTHORIZED -> Unauthorized
                 HttpURLConnection.HTTP_FORBIDDEN -> Forbidden
                 HttpURLConnection.HTTP_NOT_FOUND -> NotFound
@@ -76,6 +89,16 @@ sealed class Status<out T> {
                 HttpURLConnection.HTTP_CONFLICT -> Conflict
                 else -> ServerError
             }
+        }
+
+        private fun <T, R> parseBadRequest(
+            converter: Converter<ResponseBody, ChannelsError>,
+            response: Response<T>
+        ): Status<R> {
+            val errorBody = response.errorBody() ?: return ServerError
+            val error = converter.convert(errorBody) ?: return ServerError
+
+            return InvalidRequest(error.title)
         }
     }
 }

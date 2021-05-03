@@ -33,6 +33,7 @@ abstract class MultiPurposeScreenViewModel<State : CommonViewState>(
     protected inline fun <reified T> setResponseText(response: Status<T>) {
         state.response = when (response) {
             is Status.Success -> objectSerializer.serialize(response.value) ?: ""
+            is Status.InvalidRequest -> response.error
             Status.Forbidden -> "Forbidden"
             Status.NotFound -> "Not found"
             Status.ServerError -> "Server error"

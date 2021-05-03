@@ -15,12 +15,14 @@ import io.bitcoinsv.spvchannels.firebase.FirebaseConfig
 import io.bitcoinsv.spvchannels.messages.BearerAuthInterceptor
 import io.bitcoinsv.spvchannels.messages.Messaging
 import io.bitcoinsv.spvchannels.notifications.NotificationService
+import io.bitcoinsv.spvchannels.response.ChannelsError
 import io.bitcoinsv.spvchannels.response.Status
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -39,7 +41,8 @@ class SpvChannelsSdk(
     private val firebase: FirebaseConfig,
     private val baseUrl: String
 ) {
-    private var notificationService: NotificationService
+    private val notificationService: NotificationService
+    private val errorConverter: Converter<ResponseBody, ChannelsError>
 
     init {
         if (observer == null) {
@@ -50,6 +53,7 @@ class SpvChannelsSdk(
         val client = createClient()
         val retrofit = createRetrofit(client)
         notificationService = retrofit.create()
+        errorConverter = retrofit.responseBodyConverter(ChannelsError::class.java, arrayOf())
         firebase.updater = notificationService::updateToken
     }
 
@@ -72,7 +76,7 @@ class SpvChannelsSdk(
         val client = createClient(BasicAuthInterceptor(username, password))
         val retrofit = createRetrofit(client)
 
-        return Channel(retrofit.create(), accountId, coroutineContext)
+        return Channel(retrofit.create(), errorConverter, accountId, coroutineContext)
     }
 
     /**
@@ -95,7 +99,8 @@ class SpvChannelsSdk(
 
         return Messaging(
             retrofit.create(),
-            notificationService,
+            retrofit.create(),
+            errorConverter,
             channelId,
             token,
             firebase::fetchToken,
@@ -110,7 +115,7 @@ class SpvChannelsSdk(
     suspend fun disableAllNotifications(
         coroutineContext: CoroutineContext = Dispatchers.IO
     ) = withContext(coroutineContext) {
-        Status.fromResponse(notificationService.deleteToken(firebase.fetchToken()))
+        Status.fromResponse(errorConverter, notificationService.deleteToken(firebase.fetchToken()))
     }
 
     /**

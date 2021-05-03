@@ -6,25 +6,30 @@ import io.bitcoinsv.spvchannels.channels.models.ChannelInfo
 import io.bitcoinsv.spvchannels.channels.models.ChannelPermissions
 import io.bitcoinsv.spvchannels.channels.models.Retention
 import io.bitcoinsv.spvchannels.channels.models.TokenInfo
+import io.bitcoinsv.spvchannels.channels.models.api.ChannelsResponse
 import io.bitcoinsv.spvchannels.channels.models.api.CreateRequest
 import io.bitcoinsv.spvchannels.channels.models.api.CreateTokenRequest
+import io.bitcoinsv.spvchannels.response.ChannelsError
 import io.bitcoinsv.spvchannels.response.Status
+import io.bitcoinsv.spvchannels.util.StatusMapping
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
+import retrofit2.Converter
 
 class Channel internal constructor(
     private val service: ChannelService,
+    override val errorConverter: Converter<ResponseBody, ChannelsError>,
     private val accountId: String,
     private val context: CoroutineContext,
-) {
+) : StatusMapping {
+
     /**
      * Returns a list of all Channels
      */
     suspend fun getAllChannels(): Status<List<ChannelInfo>> = withContext(context) {
-        Status.fromResponse(
+        mapFromResponse(ChannelsResponse::channels) {
             service.getAllChannels(accountId)
-        ) {
-            it.channels
         }
     }
 
@@ -42,12 +47,12 @@ class Channel internal constructor(
         sequenced: Boolean,
         retention: Retention,
     ): Status<ChannelInfo> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             service.createChannel(
                 accountId,
                 CreateRequest(publicRead, publicWrite, sequenced, retention)
             )
-        )
+        }
     }
 
     /**
@@ -69,13 +74,13 @@ class Channel internal constructor(
         publicWrite: Boolean,
         locked: Boolean,
     ): Status<ChannelPermissions> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             service.amendChannel(
                 accountId,
                 channelId,
                 ChannelPermissions(publicRead, publicWrite, locked)
             )
-        )
+        }
     }
 
     /**
@@ -84,9 +89,9 @@ class Channel internal constructor(
      * @param channelId the channel to retrieve the information for
      */
     suspend fun getChannel(channelId: String): Status<ChannelInfo> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             service.getChannel(accountId, channelId)
-        )
+        }
     }
 
     /**
@@ -95,9 +100,9 @@ class Channel internal constructor(
      * @param channelId the channel to delete
      */
     suspend fun deleteChannel(channelId: String): Status<Unit> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             service.deleteChannel(accountId, channelId)
-        )
+        }
     }
 
     /**
@@ -110,9 +115,9 @@ class Channel internal constructor(
         channelId: String,
         token: String? = null
     ): Status<List<TokenInfo>> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             service.getTokens(accountId, channelId, token)
-        )
+        }
     }
 
     /**
@@ -125,9 +130,9 @@ class Channel internal constructor(
         channelId: String,
         token: String,
     ): Status<TokenInfo> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             service.getTokenInfo(accountId, channelId, token)
-        )
+        }
     }
 
     /**
@@ -144,13 +149,13 @@ class Channel internal constructor(
         canRead: Boolean,
         canWrite: Boolean,
     ): Status<TokenInfo> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             service.createToken(
                 accountId,
                 channelId,
                 CreateTokenRequest(description, canRead, canWrite)
             )
-        )
+        }
     }
 
     /**
@@ -163,12 +168,12 @@ class Channel internal constructor(
         channelId: String,
         token: String,
     ): Status<Unit> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             service.revokeToken(
                 accountId,
                 channelId,
                 token
             )
-        )
+        }
     }
 }

@@ -10,10 +10,14 @@ import io.bitcoinsv.spvchannels.messages.models.ReadRequest
 import io.bitcoinsv.spvchannels.notifications.Notification
 import io.bitcoinsv.spvchannels.notifications.NotificationService
 import io.bitcoinsv.spvchannels.notifications.models.TokenRequest
+import io.bitcoinsv.spvchannels.response.ChannelsError
 import io.bitcoinsv.spvchannels.response.Status
+import io.bitcoinsv.spvchannels.util.StatusMapping
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.withContext
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
+import retrofit2.Converter
 
 /**
  * The [Messaging] APIs allow account holders, third parties, or even general public to read from,
@@ -23,12 +27,13 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class Messaging internal constructor(
     private val messageService: MessageService,
     private val notificationService: NotificationService,
+    override val errorConverter: Converter<ResponseBody, ChannelsError>,
     private val channelId: String,
     private val apiToken: String,
     private val fetchToken: suspend () -> String,
     private val encryption: Encryption,
     private val context: CoroutineContext,
-) {
+) : StatusMapping {
     /**
      * Returns the current max sequence in channel.
      */
@@ -37,7 +42,7 @@ class Messaging internal constructor(
         if (response.isSuccessful) {
             val header = response.headers()["ETag"] ?: ""
             Status.Success(header)
-        } else Status.fromResponse(response) { "ignored" }
+        } else Status.fromResponse(errorConverter, response) { "ignored" }
     }
 
     /**
@@ -50,11 +55,11 @@ class Messaging internal constructor(
         contentType: ContentType,
         message: ByteArray
     ): Status<RawMessage> = withContext(context) {
-        Status.fromResponse(
+        mapFromResponse({ RawMessage(it, encryption) }) {
             messageService.sendMessage(
                 channelId, encryption.encrypt(message).toRequestBody(contentType.mediaType)
             )
-        ) { RawMessage(it, encryption) }
+        }
     }
 
     /**
@@ -65,10 +70,10 @@ class Messaging internal constructor(
     suspend fun getAllMessages(
         unreadOnly: Boolean = true
     ): Status<List<RawMessage>> = withContext(context) {
-        Status.fromResponse(
-            messageService.getMessages(channelId, unreadOnly)
-        ) {
+        mapFromResponse({
             it.map { message -> RawMessage(message, encryption) }
+        }) {
+            messageService.getMessages(channelId, unreadOnly)
         }
     }
 
@@ -84,9 +89,9 @@ class Messaging internal constructor(
         read: Boolean,
         markOlder: Boolean? = null
     ): Status<Unit> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             messageService.markMessageRead(channelId, sequenceId, markOlder, ReadRequest(read))
-        )
+        }
     }
 
     /**
@@ -97,9 +102,9 @@ class Messaging internal constructor(
     suspend fun deleteMessage(
         sequenceId: String,
     ): Status<Unit> = withContext(context) {
-        Status.fromResponse(
+        fromResponse {
             messageService.deleteMessage(channelId, sequenceId)
-        )
+        }
     }
 
     /**
@@ -113,9 +118,9 @@ class Messaging internal constructor(
         DefaultSpvMessagingService.registerForNotifications(channelId, listener)
         val token = fetchToken()
 
-        Status.fromResponse(
+        fromResponse {
             notificationService.registerFcmToken("Bearer $apiToken", TokenRequest(token))
-        )
+        }
     }
 
     /**
@@ -124,8 +129,8 @@ class Messaging internal constructor(
     suspend fun deregisterNotifications() = withContext(context) {
         val token = fetchToken()
 
-        Status.fromResponse(
+        fromResponse {
             notificationService.deleteToken(token, channelId)
-        )
+        }
     }
 }

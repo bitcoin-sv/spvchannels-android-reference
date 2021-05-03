@@ -5,6 +5,8 @@ package io.bitcoinsv.spvchannels.host.screens.messages
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.bitcoinsv.spvchannels.encryption.NoOpEncryption
+import io.bitcoinsv.spvchannels.encryption.sodium.LibSodiumEncryption
 import io.bitcoinsv.spvchannels.host.ChannelsSdkHolder
 import io.bitcoinsv.spvchannels.host.R
 import io.bitcoinsv.spvchannels.host.logging.ObjectSerializer
@@ -18,6 +20,7 @@ import io.bitcoinsv.spvchannels.response.Status
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
+import okio.ByteString.Companion.decodeBase64
 
 @HiltViewModel
 class MessagesViewModel @Inject constructor(
@@ -27,8 +30,17 @@ class MessagesViewModel @Inject constructor(
     private val storage: Storage,
 ) : MultiPurposeScreenViewModel<ViewState>(objectSerializer, savedStateHandle) {
     private val args by navArgs<MessagesFragmentArgs>()
-    private val messages = channelsSdkHolder.sdkForUrl(args.baseUrl)
-        .messagingWithToken(args.channelId, args.token)
+    private val messages = channelsSdkHolder.sdkForUrl(args.baseUrl).let {
+        val encrpytion = if (args.encrypt) {
+            LibSodiumEncryption.Builder()
+                .withKeyPair(PUBLIC_KEY, SECRET_KEY)
+                .build()
+        } else {
+            NoOpEncryption()
+        }
+
+        it.messagingWithToken(args.channelId, args.token, encrpytion)
+    }
     private val notificationFlow = MutableSharedFlow<Notification>()
     val notification = notificationFlow.map { Event(it) }.asLiveData()
 
@@ -124,5 +136,12 @@ class MessagesViewModel @Inject constructor(
         val result = messages.deleteMessage(state.messageId)
 
         setResponseText(result)
+    }
+
+    companion object {
+        val PUBLIC_KEY =
+            "3uNk31m6mtuKeK/f6U5EFREilaahQR2PewReP3Cypzg=".decodeBase64()!!.toByteArray()
+        val SECRET_KEY =
+            "Pr9g/f79rGIlIq+NpsXreUifC5KTTwRYLaWTYjhHfY8=".decodeBase64()!!.toByteArray()
     }
 }

@@ -142,6 +142,8 @@ class Channel internal constructor(
      * @param description the description for the token
      * @param canRead whether or not the token has the read permission
      * @param canWrite whether or not the token has the write permission
+     *
+     * @throws [IllegalArgumentException] if either [channelId] or [description] is an empty string.
      */
     suspend fun createToken(
         channelId: String,
@@ -149,12 +151,18 @@ class Channel internal constructor(
         canRead: Boolean,
         canWrite: Boolean,
     ): Status<TokenInfo> = withContext(context) {
-        fromResponse {
-            service.createToken(
-                accountId,
-                channelId,
-                CreateTokenRequest(description, canRead, canWrite)
+        when {
+            channelId.isEmpty() -> throw IllegalArgumentException("Channel ID should not be empty")
+            description.isEmpty() -> throw IllegalArgumentException(
+                "Description should not be empty"
             )
+            else -> fromResponse {
+                service.createToken(
+                    accountId,
+                    channelId,
+                    CreateTokenRequest(description, canRead, canWrite)
+                )
+            }
         }
     }
 

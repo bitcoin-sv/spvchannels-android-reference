@@ -44,6 +44,11 @@ class StartupViewModel @Inject constructor(
         set(value) {
             storage.token = value
         }
+    var encrypt: Boolean
+        get() = storage.encrypt
+        set(value) {
+            storage.encrypt = value
+        }
 
     fun openChannels() {
         navFlow.emitInScope(
@@ -65,6 +70,7 @@ class StartupViewModel @Inject constructor(
                     url,
                     channelId,
                     token,
+                    encrypt,
                 )
             )
         )

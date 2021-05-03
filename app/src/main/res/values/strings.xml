@@ -45,4 +45,5 @@
     <string name="msg_message_id">Message ID</string>
     <string name="msg_notifications_enabled">Notifications enabled</string>
     <string name="action_disable_all_notifications">Disable all notifications</string>
+    <string name="msg_encryption">libSodium Encryption</string>
 </resources>

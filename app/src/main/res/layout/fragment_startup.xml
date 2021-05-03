@@ -130,6 +130,15 @@
                 android:text="@={viewModel.token}"
                 app:layout_constraintTop_toBottomOf="@id/et_channel_id" />
 
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_encrypt"
+                android:layout_marginHorizontal="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.encrypt}"
+                android:text="@string/msg_encryption"
+                app:layout_constraintTop_toBottomOf="@id/et_token" />
+
             <Button
                 android:id="@+id/btn_start_messaging"
                 android:layout_width="match_parent"
@@ -138,7 +147,7 @@
                 android:layout_marginTop="12dp"
                 android:onClick="@{_ -> viewModel.openMessages()}"
                 android:text="@string/action_open_messages"
-                app:layout_constraintTop_toBottomOf="@id/et_token" />
+                app:layout_constraintTop_toBottomOf="@id/sw_encrypt" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

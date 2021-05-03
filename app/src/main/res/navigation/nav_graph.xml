@@ -49,5 +49,8 @@
         <argument
             android:name="token"
             app:argType="string" />
+        <argument
+            android:name="encrypt"
+            app:argType="boolean" />
     </fragment>
 </navigation>

@@ -90,6 +90,28 @@ artifacts {
 }
 
 afterEvaluate {
+    def outputAarDir = rootProject.file(project.name + '/build/outputs/aar/')
+    def outputAarUnzippedDir = rootProject.file(project.name + '/build/outputs/aar/unzipped')
+    def aarReleaseFile = rootProject.file(project.name + '/build/outputs/aar/' + project.name + '-release.aar')
+
+    task unzipAar(type: Copy) {
+        from zipTree(aarReleaseFile)
+        into outputAarUnzippedDir
+    }
+
+    task addLicenseFile(type: Copy, dependsOn: 'unzipAar') {
+        from "${rootDir}/LICENSE"
+        into "$outputAarUnzippedDir/META-INF"
+    }
+
+    task reZipAar(type: Zip, dependsOn: 'addLicenseFile') {
+        from outputAarUnzippedDir
+        include '*'
+        include '*/**'
+        archiveName project.name + '-release.aar'
+        destinationDir(outputAarDir)
+    }
+
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -142,4 +164,6 @@ afterEvaluate {
             }
         }
     }
+
+    bundleReleaseAar.finalizedBy(reZipAar)
 }

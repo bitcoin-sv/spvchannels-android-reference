@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-    version = '1.0.0'
+    version = '1.0.0-beta'
 }
 
 android {
@@ -102,6 +102,33 @@ afterEvaluate {
                 artifact javadocJar
 
                 pom.withXml {
+                    asNode().appendNode('name', 'SPV Channels Android SDK Reference Implementation')
+                    asNode().appendNode('description', 'A mobile SDK to facilitate Simplified Payment Verification (SPV) development on the Android platform.')
+                    asNode().appendNode('url', 'https://github.com/bitcoin-sv/spvchannels-android-reference')
+
+                    asNode().appendNode('licenses')
+                            .appendNode('license')
+                            .appendNode('name', 'Open BSV License')
+                            .parent()
+                            .appendNode('url', 'https://github.com/bitcoin-sv/spvchannels-android-reference/blob/master/LICENSE')
+
+                    asNode().appendNode('developers')
+                            .appendNode('developer')
+                            .appendNode('organization', 'nChain')
+                            .parent()
+                            .appendNode('organizationUrl', 'https://nchain.com/')
+                            .parent()
+                            .appendNode('name', 'Zan Skamljic')
+                            .parent()
+                            .appendNode('email', 'someemail')
+
+                    asNode().appendNode('scm')
+                            .appendNode('connection', 'scm:git:https://github.com/bitcoin-sv/spvchannels-android-reference.git')
+                            .parent()
+                            .appendNode('developerConnection', 'scm:git:https://github.com/bitcoin-sv/spvchannels-android-reference.git')
+                            .parent()
+                            .appendNode('url', 'https://github.com/bitcoin-sv/spvchannels-android-reference')
+
                     def dependenciesNode = asNode().appendNode('dependencies')
                     configurations.implementation.allDependencies.each {
                         if (it.group != null && (it.name != null || "unspecified" == it.name) && it.version != null) {
